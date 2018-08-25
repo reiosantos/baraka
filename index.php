@@ -1,3 +1,6 @@
+
+<?php require "backend/controller.php"; ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
