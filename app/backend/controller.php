@@ -6,15 +6,14 @@
  * Time: 10:55 PM
  */
 
-require 'autoload.php';
+//require '../autoload.php';
 require 'utils.php';
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
 
-$db= new Database();
+global $entityManager;
 
-if ($db == null){
+
+if ($entityManager === null){
     $error = 'Unable to connect to database. Please consult the system administrator.';
 }
 
