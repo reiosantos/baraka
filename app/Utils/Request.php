@@ -70,9 +70,40 @@ class Request implements IRequest
         return $this->requestUri;
     }
 
-    public function getAction(): string
+    public function getControllerName(): ?string
     {
-        return $this->request['name'] ?? null;
+        // This is used if the application is running in docker and/or the .htaccess is
+        // working/ is able to resolve the path names
+        // in the form /controller/action/
+        $action = explode('/', $this->requestUri);
+        return $action[1];
+
+        // use below if server not running in docker or the .htaccess is not working for soe reason
+        // return $this->request['name'] ?? null;
+    }
+
+    public function getAction(): ?string
+    {
+        // This is used if the application is running in docker and/or the .htaccess is
+        // working/ is able to resolve the path names
+        // in the form /controller/action/
+        $action = explode('/', $this->requestUri);
+        return count($action) > 1 ? $action[2] : null;
+
+        // use below if server not running in docker or the .htaccess is not working for soe reason
+        // return $this->request['name'] ?? null;
+    }
+
+    public function getRequestURIAttributes(): array
+    {
+        // This is used if the application is running in docker and/or the .htaccess is
+        // working/ is able to resolve the path names
+        // in the form /controller/action/
+        $uri = explode('/', $this->requestUri);
+        return array_slice($uri, 3);
+
+        // use below if server not running in docker or the .htaccess is not working for soe reason
+        // return $this->request['name'] ?? null;
     }
 
     public function get(string $param, ?string $default = null): ?string
@@ -92,5 +123,4 @@ class Request implements IRequest
         }
         return $default;
     }
-
 }

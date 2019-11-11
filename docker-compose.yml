@@ -5,7 +5,7 @@ services:
     app:
         build:
             context: ""
-            dockerfile: ../Dockerfile
+            dockerfile: ./Dockerfile
         image: baraka
         container_name: baraka-app
         restart: on-failure
@@ -17,7 +17,7 @@ services:
         depends_on:
             - db
         volumes:
-            - ./:/var/www
+            - ./:/var/www/html
         networks:
             - app-network
 

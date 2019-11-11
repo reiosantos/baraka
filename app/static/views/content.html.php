@@ -38,7 +38,7 @@
 
                     <li class="span4">
                         <div class="thumbnail">
-                            <img src="app/static/img/racet.jpg" alt="ALT NAME">
+                            <img src="/app/static/img/racet.jpg" alt="ALT NAME">
                         </div>
                         <div class="caption">
                             <h5><span class="fa fa-check-circle"> Praise Him</span></h5>
@@ -50,7 +50,7 @@
 
                     <li class="span4">
                         <div class="thumbnail">
-                            <img src="app/static/img/jremiah.jpg" alt="ALT NAME">
+                            <img src="/app/static/img/jremiah.jpg" alt="ALT NAME">
                         </div>
                         <div class="caption">
                             <h5><span class="fa fa-check-circle"> Life</span></h5>
@@ -62,7 +62,7 @@
 
                     <li class="span4">
                         <div class="thumbnail">
-                            <img src="app/static/img/mp3/mp31.png" alt="ALT NAME">
+                            <img src="/app/static/img/mp3/mp31.png" alt="ALT NAME">
                         </div>
                         <div class="caption">
                             <h5><span class="fa fa-check-circle"> Amazzi Gobulamu</span></h5>
@@ -77,7 +77,7 @@
 
                     <li class="span4">
                         <div class="thumbnail">
-                            <img src="app/static/img/mottta.jpg" alt="ALT NAME">
+                            <img src="/app/static/img/mottta.jpg" alt="ALT NAME">
                         </div>
                         <div class="caption">
                             <h5><span class="fa fa-check-circle"> Obrigado</span></h5>
@@ -90,7 +90,7 @@
 
                     <li class="span4">
                         <div class="thumbnail">
-                            <img src="app/static/img/babygloria.jpg" alt="ALT NAME">
+                            <img src="/app/static/img/babygloria.jpg" alt="ALT NAME">
                         </div>
                         <div class="caption">
                             <h5><span class="fa fa-check-circle"> DNA</span></h5>
@@ -102,7 +102,7 @@
 
                     <li class="span4">
                         <div class="thumbnail">
-                            <img src="app/static/img/deejayawar.jpg" alt="ALT NAME">
+                            <img src="/app/static/img/deejayawar.jpg" alt="ALT NAME">
                         </div>
                         <div class="caption">
                             <h5><span class="fa fa-check-circle"> Represent Jesus</span></h5>
