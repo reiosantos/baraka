@@ -1,0 +1,16 @@
+{
+    "type": "project",
+    "license": "proprietary",
+    "require": {
+        "doctrine/orm": "2.6.*"
+    }
+    ,
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}

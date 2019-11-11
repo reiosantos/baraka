@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+    #Baraka App
+    app:
+        build:
+            context: ""
+            dockerfile: ../Dockerfile
+        image: baraka
+        container_name: baraka-app
+        restart: on-failure
+        tty: true
+        environment:
+            DB_URL: mysql://root:baraka-root@db/baraka
+        ports:
+          - 8000:80
+        depends_on:
+            - db
+        volumes:
+            - ./:/var/www
+        networks:
+            - app-network
+
+    #MySQL Service
+    db:
+        image: mysql:5.7
+        container_name: baraka-db
+        restart: on-failure
+        tty: true
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./dbdata:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: baraka
+            MYSQL_ROOT_PASSWORD: baraka-root
+        networks:
+            - app-network
+
+#Docker Networks
+networks:
+    app-network:
+        driver: bridge
