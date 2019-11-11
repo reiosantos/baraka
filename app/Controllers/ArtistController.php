@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection MissingReturnTypeInspection */
 
 namespace App\Controllers;
 
@@ -10,7 +10,7 @@ class ArtistController implements Controller
      * @param IRequest $request
      * @return mixed
      */
-    public function processRequest(IRequest $request): mixed
+    public function processRequest(IRequest $request)
     {
         // TODO: Implement processRequest() method.
     }

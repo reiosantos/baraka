@@ -1,8 +1,9 @@
 <!--headers-->
 <div class="container">
     <div class="row">
-
         <div id="topRow">
+            <h4 class="text-danger"><?php if (isset($error)) { echo $error; } ?></h4>
+
             <p class="lead">Baraka</p>
             <p>Love music, Love Jesus</p>
             <p class="bold">Free mp3 download</p>

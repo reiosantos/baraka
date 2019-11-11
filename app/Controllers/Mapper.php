@@ -42,7 +42,7 @@ class Mapper
      * @return Controller
      * @throws RuntimeException
      */
-    public function get(?string $name): Controller {
+    public function getController(?string $name): Controller {
         if (!array_key_exists($name, $this->controllerMap)) {
             throw new RuntimeException('No handler found to process this request.');
         }

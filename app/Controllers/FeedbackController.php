@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection MissingReturnTypeInspection */
+
 namespace App\Controllers;
 
 
@@ -13,7 +14,7 @@ class FeedbackController implements Controller
      * @param IRequest $request
      * @return mixed
      */
-    public function processRequest(IRequest $request): mixed
+    public function processRequest(IRequest $request)
     {
         $this->operation = $request;
 

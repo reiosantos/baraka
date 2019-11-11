@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection MissingReturnTypeInspection */
+
 namespace App\Controllers;
 
 use App\Utils\IRequest;
@@ -9,5 +10,5 @@ interface Controller
      * @param IRequest $request
      * @return mixed
      */
-    public function processRequest(IRequest $request): mixed;
+    public function processRequest(IRequest $request);
 }
