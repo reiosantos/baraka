@@ -41,6 +41,9 @@ COPY . /var/www/html
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www/html
 
+RUN composer install
+RUN composer dump-autoload -o
+
 # Change current user to www
 #USER www
 

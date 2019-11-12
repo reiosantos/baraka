@@ -17,10 +17,10 @@ $details=array();
 
 $details['db'] = [
     'driver' => 'pdo_mysql',
-    'host' => getenv('DB_HOST') ?? 'localhost',
-    'user' => getenv('DB_USERNAME') ?? 'root',
-    'password' => getenv('DB_PASSWORD') ??'ronald507',
-    'dbname' => getenv('DB_DATABASE') ?? 'baraka'
+    'host' => getenv('DB_HOST'),
+    'user' => getenv('DB_USERNAME'),
+    'password' => getenv('DB_PASSWORD'),
+    'dbname' => getenv('DB_DATABASE')
 ];
 
-$details['APP_DEBUG'] = getenv('APP_DEBUG') ?? true;
+$details['APP_DEBUG'] = getenv('APP_DEBUG');

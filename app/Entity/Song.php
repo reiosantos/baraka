@@ -10,6 +10,7 @@ use Exception;
  * Class Song
  * @ORM\Entity
  * @ORM\Table(name="songs")
+ * @ORM\HasLifecycleCallbacks
  */
 class Song extends Uploader
 {

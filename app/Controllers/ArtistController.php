@@ -2,16 +2,20 @@
 
 namespace App\Controllers;
 
+use App\Entity\Artist;
 use App\Utils\IRequest;
 
-class ArtistController implements Controller
+class ArtistController extends AbstractCtrl
 {
-    /**
-     * @param IRequest $request
-     * @return mixed
-     */
-    public function processRequest(IRequest $request)
+    public $entityName = Artist::class;
+
+    public function post(IRequest $request)
     {
-        // TODO: Implement processRequest() method.
+        // TODO: Implement post() method.
+    }
+
+    public function put(IRequest $request)
+    {
+        // TODO: Implement put() method.
     }
 }

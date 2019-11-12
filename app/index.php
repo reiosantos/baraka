@@ -3,8 +3,11 @@
 namespace App;
 
 use App\Controllers\Mapper;
+use App\Database\Database;
 use App\Utils\Request;
 
+global $database;
+$database = new Database();
 $request = new Request();
 
 try {

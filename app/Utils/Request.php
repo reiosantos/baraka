@@ -45,27 +45,30 @@ class Request implements IRequest
 
     private function populateRequestObject(): void
     {
-        $this->method = $this->server['REQUEST_METHOD'];
+        if (!array_key_exists('REQUEST_METHOD', $this->server)) {
+            return;
+        }
+        $this->method = strtolower($this->server['REQUEST_METHOD']);
         $this->queryString = $this->server['QUERY_STRING'];
         $this->host = $this->server['HTTP_HOST'];
         $this->requestUri = $this->server['REQUEST_URI'];
     }
 
-    public function getRequestMethod(): string
+    public function getRequestMethod(): ?string
     {
        return $this->method;
     }
 
-    public function getQueryString(): string{
+    public function getQueryString(): ?string{
         return $this->queryString;
     }
 
-    public function getHost(): string
+    public function getHost(): ?string
     {
         return $this->host;
     }
 
-    public function getRequestUri(): string
+    public function getRequestUri(): ?string
     {
         return $this->requestUri;
     }
@@ -76,6 +79,9 @@ class Request implements IRequest
         // working/ is able to resolve the path names
         // in the form /controller/action/
         $action = explode('/', $this->requestUri);
+        if (count($action) <= 1 || $action[1] === '') {
+            return 'songs';
+        }
         return $action[1];
 
         // use below if server not running in docker or the .htaccess is not working for soe reason
@@ -94,7 +100,7 @@ class Request implements IRequest
         // return $this->request['name'] ?? null;
     }
 
-    public function getRequestURIAttributes(): array
+    public function getRequestURIAttributes(): ?array
     {
         // This is used if the application is running in docker and/or the .htaccess is
         // working/ is able to resolve the path names
@@ -104,6 +110,15 @@ class Request implements IRequest
 
         // use below if server not running in docker or the .htaccess is not working for soe reason
         // return $this->request['name'] ?? null;
+    }
+
+    public function getObjectPk(): ?string
+    {
+        $attr = $this->getRequestURIAttributes();
+        if (count($attr) === 0) {
+            return null;
+        }
+        return $this->getRequestURIAttributes()[0];
     }
 
     public function get(string $param, ?string $default = null): ?string
