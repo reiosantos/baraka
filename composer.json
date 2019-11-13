@@ -2,7 +2,8 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "doctrine/orm": "2.6.*"
+        "doctrine/orm": "2.6.*",
+        "doctrine/migrations": "2.1.2"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master"

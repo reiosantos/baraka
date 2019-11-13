@@ -14,4 +14,6 @@ interface IRequest
     public function getRequestURIAttributes(): ?array;
     public function getObjectPk(): ?string;
     public function get(string $param, string $default = null): ?string;
+    public function getFile(string $param): ?array;
+    public function getFilesArray(): ?array;
 }

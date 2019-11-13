@@ -24,10 +24,15 @@ abstract class AbstractCtrl implements Controller
     final public function processRequest(IRequest $request)
     {
         $method = $request->getRequestMethod();
+        $action = $request->getAction();
+
+        if ($action && method_exists($this, $action)) {
+            return $this->{$action}($request);
+        }
         if (method_exists($this, $method)) {
             return $this->{$method}($request);
         }
-        throw new RuntimeException('Method `'. $method .'` not implemented.');
+        throw new RuntimeException('Method/Action `'. $method .'` not implemented.');
     }
 
     /**
@@ -39,7 +44,11 @@ abstract class AbstractCtrl implements Controller
         if ($pk === null) {
             return $this->db->getRepository($this->entityName)->findAll();
         }
-        return $this->db->getRepository($this->entityName)->find($pk);
+        $obj = $this->db->getRepository($this->entityName)->find($pk);
+        if ($obj === null) {
+            throw new RuntimeException('No Result Found');
+        }
+        return $obj;
     }
 
     /**
@@ -54,7 +63,7 @@ abstract class AbstractCtrl implements Controller
         $pk = $request->getObjectPk();
         $object = $this->db->find($this->entityName, $pk);
         if ($object === null) {
-            throw new ORM\NoResultException();
+            throw new RuntimeException('No Result Found For Deletion');
         }
         $this->db->delete($object);
         return true;

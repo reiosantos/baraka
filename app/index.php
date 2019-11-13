@@ -4,6 +4,9 @@ namespace App;
 
 use App\Controllers\Mapper;
 use App\Database\Database;
+use App\Entity\Artist;
+use App\Entity\Feedback;
+use App\Entity\Song;
 use App\Utils\Request;
 
 global $database;
@@ -16,3 +19,7 @@ try {
 } catch (\Exception $e) {
     $error = $e->getMessage();
 }
+
+$artists = $database->getRepository(Artist::class)->findAll();
+$songs = $database->getRepository(Song::class)->findAll();
+$feedback = $database->getRepository(Feedback::class)->findAll();

@@ -1,6 +1,7 @@
 <?php
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -41,6 +42,17 @@ class Artist extends Uploader
      * @ORM\Column(name="photo_name", type="string", length=255, nullable=true)
      */
     private $photoName;
+
+    /**
+     * @var ArrayCollection[]|null
+     * @ORM\OneToMany(targetEntity="App\Entity\Song", mappedBy="artist")
+     */
+    private $songs;
+
+    public function __construct()
+    {
+        $this->songs = new ArrayCollection();
+    }
 
     /**
      * @return int|null
@@ -101,9 +113,9 @@ class Artist extends Uploader
     /**
      * {@inheritDoc}
      */
-    public function setPath(?string $uploadFieldName, mixed $file, bool $override = false): mixed
+    public function setPath(?string $uploadFieldName, array $file, bool $override = false): array
     {
-        parent::setPath($uploadFieldName, $file, $override);
+        $file = parent::setPath($uploadFieldName, $file, $override);
         $this->setPhotoName($file['path']);
         return $file;
     }

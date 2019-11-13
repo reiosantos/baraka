@@ -14,7 +14,16 @@ abstract class Uploader
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'../'.$this->getUploadDir();
+        $dir = dirname(__DIR__) . '/' .$this->getUploadDir();
+        if (!file_exists($dir) && !mkdir($dir, null, true) && !is_dir($dir)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+        }
+        return $dir;
+    }
+
+    public function getWebPath(string $name): string
+    {
+        return explode(dirname(__DIR__, 2), $name)[1];
     }
 
     public function getUploadDir(): string
@@ -33,25 +42,29 @@ abstract class Uploader
     }
 
     /**
+     * @param array $files
      * @return mixed
      */
-    public function setFiles($files): void
+    public function setFiles(array $files): void
     {
         foreach ($files as $name => $file) {
-            $this->files[$name] = $file;
+            if ($file['name']) {
+                $this->files[$name] = $file;
+            }
         }
     }
 
     /**
      * @param string|null $uploadFieldName
-     * @param mixed $file
+     * @param array $file
      * @param bool $override
      * @return mixed
      */
-    public function setPath(?string $uploadFieldName, mixed $file, bool $override = false): mixed {
+    public function setPath(?string $uploadFieldName, array $file, bool $override = false): array {
         if (!isset($file['path']) || $override) {
             $filename = sha1(uniqid(mt_rand(), true));
             $file['path'] = $this->getUploadRootDir() . $filename . '-' . $file['name'];
+            $file['path'] = str_replace(' ', '-', $file['path']);
             if ($uploadFieldName !== null) {
                 $file['uploadFieldName'] = $uploadFieldName;
             }

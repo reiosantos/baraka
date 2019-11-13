@@ -25,6 +25,20 @@
                 </div>
             </form>
 
+            <form class="marginTop form-horizontal" enctype="multipart/form-data" action="." method="post">
+                <input name="name" type="text" placeholder="Song name" />
+                <select name="artist">
+                    <?php
+                        foreach ($artists as $artist) {
+                            echo '<option value="'. $artist->getId().'">'. $artist->getName() .'</option>';
+                        }
+                    ?>
+                </select>
+                <input name="albumArt" type="file" />
+                <input name="song" type="file" />
+                <button type="submit" name="submit">Submit</button>
+            </form>
+
             <!--centered text hr-->
             <div class="strike">
                 <span>Top S<span class="glyphicon glyphicon-headphones"></span>ngs this Week</span>

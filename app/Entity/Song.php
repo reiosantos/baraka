@@ -52,6 +52,13 @@ class Song extends Uploader
     private $albumArtName;
 
     /**
+     * @var Artist|null
+     * @ORM\ManyToOne(targetEntity="App\Entity\Artist", inversedBy="songs")
+     * @ORM\JoinColumn(name="artist_id", referencedColumnName="ID")
+     */
+    private $artist;
+
+    /**
      * @return int|null
      */
     public function getId(): ?int
@@ -69,10 +76,12 @@ class Song extends Uploader
 
     /**
      * @param string|null $name
+     * @return Song
      */
-    public function setName(?string $name): void
+    public function setName(?string $name): Song
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -85,11 +94,13 @@ class Song extends Uploader
 
     /**
      * @param string|null $uploadDate
+     * @return Song
      * @throws Exception
      */
-    public function setUploadDate(?string $uploadDate): void
+    public function setUploadDate(?string $uploadDate = null): Song
     {
         $this->uploadDate = new DateTime('now');
+        return $this;
     }
 
     /**
@@ -102,10 +113,12 @@ class Song extends Uploader
 
     /**
      * @param string|null $fileName
+     * @return Song
      */
-    public function setFileName(?string $fileName): void
+    public function setFileName(?string $fileName): Song
     {
         $this->fileName = $fileName;
+        return $this;
     }
 
     /**
@@ -118,22 +131,48 @@ class Song extends Uploader
 
     /**
      * @param string|null $albumArtName
+     * @return Song
      */
-    public function setAlbumArtName(?string $albumArtName): void
+    public function setAlbumArtName(?string $albumArtName): Song
     {
         $this->albumArtName = $albumArtName;
+        return $this;
+    }
+
+    /**
+     * @return Artist|null
+     */
+    public function getArtist(): ?Artist
+    {
+        return $this->artist;
+    }
+
+    /**
+     * @param Artist|object $artist
+     * @return Song
+     */
+    public function setArtist(Artist $artist): Song
+    {
+        if (null === $artist) {
+            $this->artist = null;
+        } elseif ($artist instanceof Artist) {
+            $this->artist = $artist;
+        }else {
+            throw new \InvalidArgumentException('Artist is not valid');
+        }
+        return $this;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function setPath(?string $uploadFieldName, mixed $file, bool $override = false): mixed
+    public function setPath(?string $uploadFieldName, ?array $file, bool $override = false): array
     {
-        parent::setPath($uploadFieldName, $file, $override);
+        $file = parent::setPath($uploadFieldName, $file, $override);
 
-        if ($uploadFieldName === 'albumArtName') {
+        if ($uploadFieldName === 'albumArt') {
             $this->setAlbumArtName($file['path']);
-        } elseif ($uploadFieldName === 'fileName') {
+        } elseif ($uploadFieldName === 'song') {
             $this->setFileName($file['path']);
         }
         return $file;

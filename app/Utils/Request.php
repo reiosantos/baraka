@@ -45,11 +45,12 @@ class Request implements IRequest
 
     private function populateRequestObject(): void
     {
-        if (!array_key_exists('REQUEST_METHOD', $this->server)) {
-            return;
+        if (array_key_exists('REQUEST_METHOD', $this->server)) {
+            $this->method = strtolower($this->server['REQUEST_METHOD']);
         }
-        $this->method = strtolower($this->server['REQUEST_METHOD']);
-        $this->queryString = $this->server['QUERY_STRING'];
+        if (array_key_exists('QUERY_STRING', $this->server)) {
+            $this->queryString = $this->server['QUERY_STRING'];
+        }
         $this->host = $this->server['HTTP_HOST'];
         $this->requestUri = $this->server['REQUEST_URI'];
     }
@@ -77,7 +78,7 @@ class Request implements IRequest
     {
         // This is used if the application is running in docker and/or the .htaccess is
         // working/ is able to resolve the path names
-        // in the form /controller/action/
+        // in the form /controller/pk/
         $action = explode('/', $this->requestUri);
         if (count($action) <= 1 || $action[1] === '') {
             return 'songs';
@@ -88,25 +89,32 @@ class Request implements IRequest
         // return $this->request['name'] ?? null;
     }
 
+    /**
+     * @return array|null
+     * Implement Song upload
+    Correct PHP upload size
+    Refactor the models upload paths
+    Remove unnecessary files
+    Add migrations
+
+     */
+
     public function getAction(): ?string
     {
-        // This is used if the application is running in docker and/or the .htaccess is
-        // working/ is able to resolve the path names
-        // in the form /controller/action/
-        $action = explode('/', $this->requestUri);
-        return count($action) > 1 ? $action[2] : null;
-
-        // use below if server not running in docker or the .htaccess is not working for soe reason
-        // return $this->request['name'] ?? null;
+        $attr = $this->getRequestURIAttributes();
+        if (count($attr) < 2) {
+            return null;
+        }
+        return $attr[1];
     }
 
     public function getRequestURIAttributes(): ?array
     {
         // This is used if the application is running in docker and/or the .htaccess is
         // working/ is able to resolve the path names
-        // in the form /controller/action/
+        // in the form /controller/pk/
         $uri = explode('/', $this->requestUri);
-        return array_slice($uri, 3);
+        return array_slice($uri, 2);
 
         // use below if server not running in docker or the .htaccess is not working for soe reason
         // return $this->request['name'] ?? null;
@@ -118,7 +126,7 @@ class Request implements IRequest
         if (count($attr) === 0) {
             return null;
         }
-        return $this->getRequestURIAttributes()[0];
+        return $attr[0];
     }
 
     public function get(string $param, ?string $default = null): ?string
@@ -128,8 +136,7 @@ class Request implements IRequest
         }
         $vars = [
             $this->request,
-            $this->server,
-            $this->files
+            $this->server
         ];
         foreach ($vars as $obj) {
             if (array_key_exists($param, $obj)) {
@@ -137,5 +144,18 @@ class Request implements IRequest
             }
         }
         return $default;
+    }
+
+    public function getFile(string $param): ?array
+    {
+        if (array_key_exists($param, $this->files)) {
+            return $this->files[$param];
+        }
+        return null;
+    }
+
+    public function getFilesArray(): ?array
+    {
+         return $this->files;
     }
 }
