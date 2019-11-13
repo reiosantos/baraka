@@ -2,6 +2,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use RuntimeException;
 
 abstract class Uploader
 {
@@ -16,7 +17,7 @@ abstract class Uploader
         // documents should be saved
         $dir = dirname(__DIR__) . '/' .$this->getUploadDir();
         if (!file_exists($dir) && !mkdir($dir, null, true) && !is_dir($dir)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $dir));
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $dir));
         }
         return $dir;
     }
@@ -24,6 +25,11 @@ abstract class Uploader
     public function getWebPath(string $name): string
     {
         return explode(dirname(__DIR__, 2), $name)[1];
+    }
+
+    public function getDownloadFileName(string $fullPath): string
+    {
+        return explode('-', $fullPath, 2)[1];
     }
 
     public function getUploadDir(): string

@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Utils\IRequest;
 use RuntimeException;
-use Doctrine\ORM as ORM;
 
 abstract class AbstractCtrl implements Controller
 {
@@ -17,10 +16,6 @@ abstract class AbstractCtrl implements Controller
         $this->db = $database;
     }
 
-    /**
-     * @param IRequest $request
-     * @return mixed
-     */
     final public function processRequest(IRequest $request)
     {
         $method = $request->getRequestMethod();
@@ -35,10 +30,6 @@ abstract class AbstractCtrl implements Controller
         throw new RuntimeException('Method/Action `'. $method .'` not implemented.');
     }
 
-    /**
-     * @param IRequest $request
-     * @return ORM\Mapping\Entity[]|array|object|null
-     */
     public function get(IRequest $request) {
         $pk = $request->getObjectPk();
         if ($pk === null) {
@@ -51,13 +42,6 @@ abstract class AbstractCtrl implements Controller
         return $obj;
     }
 
-    /**
-     * @param IRequest $request
-     * @return bool
-     * @throws ORM\ORMException
-     * @throws ORM\OptimisticLockException
-     * @throws ORM\TransactionRequiredException
-     */
     public function delete(IRequest $request): bool
     {
         $pk = $request->getObjectPk();
@@ -66,6 +50,8 @@ abstract class AbstractCtrl implements Controller
             throw new RuntimeException('No Result Found For Deletion');
         }
         $this->db->delete($object);
+        $this->db->flush($object);
+        $request->redirectToHome();
         return true;
     }
 }

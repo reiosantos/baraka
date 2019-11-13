@@ -75,10 +75,12 @@ class Feedback
 
     /**
      * @param string|null $username
+     * @return Feedback
      */
-    public function setUsername(?string $username): void
+    public function setUsername(?string $username): Feedback
     {
         $this->username = $username;
+        return $this;
     }
 
     /**
@@ -91,10 +93,12 @@ class Feedback
 
     /**
      * @param string|null $email
+     * @return Feedback
      */
-    public function setEmail(?string $email): void
+    public function setEmail(?string $email): Feedback
     {
         $this->email = $email;
+        return $this;
     }
 
     /**
@@ -107,10 +111,12 @@ class Feedback
 
     /**
      * @param string|null $location
+     * @return Feedback
      */
-    public function setLocation(?string $location): void
+    public function setLocation(?string $location): Feedback
     {
         $this->location = $location;
+        return $this;
     }
 
     /**
@@ -123,10 +129,12 @@ class Feedback
 
     /**
      * @param string|null $message
+     * @return Feedback
      */
-    public function setMessage(?string $message): void
+    public function setMessage(?string $message): Feedback
     {
         $this->message = $message;
+        return $this;
     }
 
     /**
@@ -139,10 +147,16 @@ class Feedback
 
     /**
      * @param string|null $date
+     * @return Feedback
      * @throws Exception
      */
-    public function setDate(?string $date): void
+    public function setDate(?string $date = null): Feedback
     {
-        $this->date = new DateTime('now');
+        if ($date !== null) {
+            $this->date = $date;
+        } else {
+            $this->date = new DateTime('now');
+        }
+        return $this;
     }
 }

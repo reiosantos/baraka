@@ -6,9 +6,7 @@ use App\Entity\Artist;
 use App\Entity\Song;
 use App\Utils\IRequest;
 use Doctrine\ORM as ORM;
-use Doctrine\ORM\EntityNotFoundException;
 use Error;
-use Exception;
 use RuntimeException;
 
 class SongsController extends AbstractCtrl
@@ -25,15 +23,6 @@ class SongsController extends AbstractCtrl
         return true;
     }
 
-    /**
-     * @param IRequest $request
-     * @return Song
-     * @throws ORM\ORMException
-     * @throws ORM\EntityNotFoundException
-     * @throws ORM\OptimisticLockException
-     * @throws ORM\TransactionRequiredException
-     * @throws Exception
-     */
     public function post(IRequest $request)
     {
         $name = $request->get('name');
@@ -46,7 +35,7 @@ class SongsController extends AbstractCtrl
         }
         $artist = $this->db->find(Artist::class, $artistId);
         if ($artist === null) {
-            throw new EntityNotFoundException('Selected Artist Not Found');
+            throw new ORM\EntityNotFoundException('Selected Artist Not Found');
         }
         if ($name === null || trim($name) === '') {
             $name = $songFile['name'];
@@ -58,6 +47,7 @@ class SongsController extends AbstractCtrl
             ->setFileName($songFile['name'])
             ->setAlbumArtName($albumArt['name'])
             ->setFiles($request->getFilesArray());
+
         $this->db->persist($song);
         $this->db->flush($song);
         return $song;
@@ -66,5 +56,36 @@ class SongsController extends AbstractCtrl
     public function put(IRequest $request)
     {
         // TODO: Implement put() method.
+    }
+
+    /**
+     * @param IRequest $request
+     * @throws ORM\EntityNotFoundException
+     * @throws ORM\ORMException
+     * @throws ORM\OptimisticLockException
+     * @throws ORM\TransactionRequiredException
+     */
+    public function download(IRequest $request): void
+    {
+        $id = $request->getObjectPk();
+        $song = $this->db->find($this->entityName, $id);
+
+        if ($song === null || !file_exists($song->getFileName()) || !is_file($song->getFileName())) {
+            throw new ORM\EntityNotFoundException('Could not locate the requested song. Try again.');
+        }
+
+        $fileName = $song->getFileName();
+
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=' . $song->getDownloadFileName($fileName));
+        header('Content-Transfer-Encoding: binary');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($fileName));
+        ob_clean();
+        flush();
+        readfile($fileName);
     }
 }

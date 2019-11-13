@@ -12,7 +12,21 @@ class FeedbackController extends AbstractCtrl
 
     public function post(IRequest $request)
     {
-        // TODO: Implement post() method.
+        $name = $request->get('name');
+        $email = $request->get('email');
+        $location = $request->get('location');
+        $message = $request->get('message');
+
+        $feedback = new Feedback();
+        $feedback->setUsername($name)
+            ->setEmail($email)
+            ->setLocation($location)
+            ->setMessage($message)
+            ->setDate();
+
+        $this->db->persist($feedback);
+        $this->db->flush($feedback);
+        return $feedback;
     }
 
     public function put(IRequest $request)

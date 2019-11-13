@@ -4,6 +4,7 @@ namespace App\Entity;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Exception;
+use InvalidArgumentException;
 
 
 /**
@@ -99,7 +100,11 @@ class Song extends Uploader
      */
     public function setUploadDate(?string $uploadDate = null): Song
     {
-        $this->uploadDate = new DateTime('now');
+        if ($uploadDate !== null) {
+            $this->uploadDate = $uploadDate;
+        } else {
+            $this->uploadDate = new DateTime('now');
+        }
         return $this;
     }
 
@@ -158,7 +163,7 @@ class Song extends Uploader
         } elseif ($artist instanceof Artist) {
             $this->artist = $artist;
         }else {
-            throw new \InvalidArgumentException('Artist is not valid');
+            throw new InvalidArgumentException('Artist is not valid');
         }
         return $this;
     }

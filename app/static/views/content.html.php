@@ -25,7 +25,8 @@
                 </div>
             </form>
 
-            <form class="marginTop form-horizontal" enctype="multipart/form-data" action="." method="post">
+            <form class="marginTop" enctype="multipart/form-data" action="/artist"
+                  method="post">
                 <input name="name" type="text" placeholder="Song name" />
                 <select name="artist">
                     <?php
@@ -34,8 +35,8 @@
                         }
                     ?>
                 </select>
-                <input name="albumArt" type="file" />
-                <input name="song" type="file" />
+                <input name="details" type="text" />
+                <input name="photo" type="file" />
                 <button type="submit" name="submit">Submit</button>
             </form>
 

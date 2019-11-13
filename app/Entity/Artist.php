@@ -72,10 +72,12 @@ class Artist extends Uploader
 
     /**
      * @param string|null $name
+     * @return Artist
      */
-    public function setName(?string $name): void
+    public function setName(?string $name): Artist
     {
         $this->name = $name;
+        return $this;
     }
 
     /**
@@ -88,10 +90,12 @@ class Artist extends Uploader
 
     /**
      * @param string|null $details
+     * @return Artist
      */
-    public function setDetails(?string $details): void
+    public function setDetails(?string $details): Artist
     {
         $this->details = $details;
+        return $this;
     }
 
     /**
@@ -104,10 +108,12 @@ class Artist extends Uploader
 
     /**
      * @param string|null $photoName
+     * @return Artist
      */
-    public function setPhotoName(?string $photoName): void
+    public function setPhotoName(?string $photoName): Artist
     {
         $this->photoName = $photoName;
+        return $this;
     }
 
     /**

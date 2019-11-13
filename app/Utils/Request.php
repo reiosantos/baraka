@@ -1,6 +1,9 @@
-<?php
+<?php /** @noinspection GlobalVariableUsageInspection */
+
 namespace App\Utils;
 
+
+/** @noinspection ClassNameCollisionInspection */
 
 /**
  * Request represents an HTTP request.
@@ -24,17 +27,6 @@ class Request implements IRequest
     private $host;
     private $requestUri;
 
-    public const METHOD_HEAD = 'HEAD';
-    public const METHOD_GET = 'GET';
-    public const METHOD_POST = 'POST';
-    public const METHOD_PUT = 'PUT';
-    public const METHOD_PATCH = 'PATCH';
-    public const METHOD_DELETE = 'DELETE';
-    public const METHOD_PURGE = 'PURGE';
-    public const METHOD_OPTIONS = 'OPTIONS';
-    public const METHOD_TRACE = 'TRACE';
-    public const METHOD_CONNECT = 'CONNECT';
-
     public function __construct()
     {
         $this->request = $_REQUEST;
@@ -53,6 +45,15 @@ class Request implements IRequest
         }
         $this->host = $this->server['HTTP_HOST'];
         $this->requestUri = $this->server['REQUEST_URI'];
+    }
+
+    public function redirectToHome(?string $to = null): void
+    {
+        if ($to && $to !== null) {
+            header('Location: /' . $to . '/');
+            return;
+        }
+        header('Location: /' . $this->getControllerName() . '/');
     }
 
     public function getRequestMethod(): ?string
@@ -88,16 +89,6 @@ class Request implements IRequest
         // use below if server not running in docker or the .htaccess is not working for soe reason
         // return $this->request['name'] ?? null;
     }
-
-    /**
-     * @return array|null
-     * Implement Song upload
-    Correct PHP upload size
-    Refactor the models upload paths
-    Remove unnecessary files
-    Add migrations
-
-     */
 
     public function getAction(): ?string
     {
@@ -140,7 +131,7 @@ class Request implements IRequest
         ];
         foreach ($vars as $obj) {
             if (array_key_exists($param, $obj)) {
-                return $obj[$param];
+                return $this->cleanData($obj[$param]);
             }
         }
         return $default;
@@ -157,5 +148,14 @@ class Request implements IRequest
     public function getFilesArray(): ?array
     {
          return $this->files;
+    }
+
+    /**
+     * @param string $data
+     * @return string
+     */
+    public function cleanData(string $data): string
+    {
+        return htmlentities(htmlspecialchars($data), ENT_QUOTES);
     }
 }

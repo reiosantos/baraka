@@ -5,6 +5,7 @@ namespace App\Utils;
 
 interface IRequest
 {
+    public function redirectToHome(?string $to = null): void;
     public function getRequestMethod(): ?string;
     public function getQueryString(): ?string;
     public function getHost(): ?string;
@@ -16,4 +17,5 @@ interface IRequest
     public function get(string $param, string $default = null): ?string;
     public function getFile(string $param): ?array;
     public function getFilesArray(): ?array;
+    public function cleanData(string $data): string;
 }
