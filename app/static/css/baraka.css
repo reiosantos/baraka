@@ -1,0 +1,17 @@
+body, html {
+    font-family: Arial, Roboto, "Times New Roman", "Courier New", Courier, Verdana, Georgia, serif;
+    font-size: 12px;
+    height: 100%;
+}
+
+/*.btn-floating {*/
+/*    width: 30px;*/
+/*    height: 30px;*/
+/*    background-color: red;*/
+/*    border-radius: 50%;*/
+/*    !*box-shadow: 0 6px 10px 0 #666;*!*/
+/*    transition: all 0.1s ease-in-out;*/
+/*    font-size: 25px;*/
+/*    color: white;*/
+/*    text-align: center;*/
+/*}*/

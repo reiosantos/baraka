@@ -9,6 +9,7 @@ use App\Utils\IRequest;
 class FeedbackController extends AbstractCtrl
 {
     public $entityName = Feedback::class;
+    public $template = 'feedback.html.twig';
 
     public function post(IRequest $request)
     {
@@ -26,11 +27,7 @@ class FeedbackController extends AbstractCtrl
 
         $this->db->persist($feedback);
         $this->db->flush($feedback);
-        return $feedback;
-    }
 
-    public function put(IRequest $request)
-    {
-        // TODO: Implement put() method.
+        return $this->render(null, ['success' => 'Thanks for your feedback.']);
     }
 }

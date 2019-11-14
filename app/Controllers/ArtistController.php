@@ -9,12 +9,14 @@ use RuntimeException;
 class ArtistController extends AbstractCtrl
 {
     public $entityName = Artist::class;
+    public $template = 'artists.html.twig';
 
     public function post(IRequest $request)
     {
         $name = $request->get('name');
         $details = $request->get('details');
         $photo = $request->getFile('photo');
+
         if (!$name || $name === null) {
             throw new RuntimeException('Name of the artist is required.');
         }
@@ -26,11 +28,6 @@ class ArtistController extends AbstractCtrl
 
         $this->db->persist($artist);
         $this->db->flush($artist);
-        return $artist;
-    }
-
-    public function put(IRequest $request)
-    {
-        // TODO: Implement put() method.
+        return $this->render(null, ['artist' => $artist]);
     }
 }

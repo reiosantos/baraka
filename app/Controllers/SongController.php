@@ -6,12 +6,15 @@ use App\Entity\Artist;
 use App\Entity\Song;
 use App\Utils\IRequest;
 use Doctrine\ORM as ORM;
-use Error;
 use RuntimeException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
-class SongsController extends AbstractCtrl
+class SongController extends AbstractCtrl
 {
     public $entityName = Song::class;
+    public $template = 'songs.html.twig';
 
     private function validateSong(?array $song, ?string $artistId): bool {
         if ($song === null) {
@@ -31,7 +34,7 @@ class SongsController extends AbstractCtrl
         $songFile = $request->getFile('song');
 
         if (!$this->validateSong($songFile, $artistId)){
-            throw new Error('Could not Validate this request.');
+            throw new RuntimeException('Could not Validate this request.');
         }
         $artist = $this->db->find(Artist::class, $artistId);
         if ($artist === null) {
@@ -50,22 +53,22 @@ class SongsController extends AbstractCtrl
 
         $this->db->persist($song);
         $this->db->flush($song);
-        return $song;
-    }
 
-    public function put(IRequest $request)
-    {
-        // TODO: Implement put() method.
+        return $this->render(null, ['song' => $song]);
     }
 
     /**
      * @param IRequest $request
+     * @return string
      * @throws ORM\EntityNotFoundException
      * @throws ORM\ORMException
      * @throws ORM\OptimisticLockException
      * @throws ORM\TransactionRequiredException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function download(IRequest $request): void
+    public function download(IRequest $request): string
     {
         $id = $request->getObjectPk();
         $song = $this->db->find($this->entityName, $id);
@@ -87,5 +90,7 @@ class SongsController extends AbstractCtrl
         ob_clean();
         flush();
         readfile($fileName);
+
+        return $this->render();
     }
 }

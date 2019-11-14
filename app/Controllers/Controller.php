@@ -2,9 +2,12 @@
 
 namespace App\Controllers;
 
-use Doctrine\ORM as ORM;
 use App\Utils\IRequest;
+use Doctrine\ORM as ORM;
 use Exception;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 interface Controller
 {
@@ -17,6 +20,9 @@ interface Controller
     /**
      * @param IRequest $request
      * @return ORM\Mapping\Entity[]|array|object|null
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function get(IRequest $request);
 
@@ -27,10 +33,25 @@ interface Controller
      * @throws ORM\EntityNotFoundException
      * @throws ORM\OptimisticLockException
      * @throws ORM\TransactionRequiredException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      * @throws Exception
      */
     public function post(IRequest $request);
 
+    /**
+     * @param IRequest $request
+     * @return mixed
+     * @throws ORM\ORMException
+     * @throws ORM\EntityNotFoundException
+     * @throws ORM\OptimisticLockException
+     * @throws ORM\TransactionRequiredException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
     public function put(IRequest $request);
 
     /**
@@ -39,6 +60,9 @@ interface Controller
      * @throws ORM\ORMException
      * @throws ORM\OptimisticLockException
      * @throws ORM\TransactionRequiredException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function delete(IRequest $request): bool;
 }

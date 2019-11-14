@@ -11,7 +11,7 @@ use Exception;
  * @ORM\Entity
  * @ORM\Table(name="feedback")
  */
-class Feedback
+class Feedback extends BaseModel
 {
     /**
      * @var integer|null

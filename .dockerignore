@@ -124,7 +124,6 @@ composer.phar
 
 ### Symfony template
 # Cache and logs (Symfony2)
-/app/cache/*
 /app/logs/*
 !app/cache/.gitkeep
 !app/logs/.gitkeep
@@ -201,3 +200,4 @@ composer.phar
 /app/Config/database.php
 /vendors/*
 /dbdata/
+/bootstrap-4.0.0
