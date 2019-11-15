@@ -15,6 +15,7 @@ abstract class AbstractCtrl implements Controller
 {
     public $db;
     public $entityName;
+    public $dataHolder;
     private $twig;
     public $template;
 
@@ -48,7 +49,7 @@ abstract class AbstractCtrl implements Controller
         if (!$template || $template === null) {
             $template = $this->template;
         }
-        if (!$this->template) {
+        if (!$template) {
             throw InvalidTemplateSpecified::notFoundOrNotReadable($template);
         }
         $merged = array_merge($this->getResponseData(), $context);
@@ -92,7 +93,7 @@ abstract class AbstractCtrl implements Controller
             }
         }
         if ($this->template) {
-            return $this->render($this->template, ['data' => $data]);
+            return $this->render($this->template, [$this->dataHolder => $data]);
         }
         return $data;
     }

@@ -1,9 +1,11 @@
-{% extends 'partials/base.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
+    {% include 'search.html.twig' %}
+
     yhvjfytdedgh
-    {% for var in data %}
+    {% for var in songs %}
         {{ var.name|upper }}
     {% endfor %}
 

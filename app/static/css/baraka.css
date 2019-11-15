@@ -4,14 +4,74 @@ body, html {
     height: 100%;
 }
 
-/*.btn-floating {*/
-/*    width: 30px;*/
-/*    height: 30px;*/
-/*    background-color: red;*/
-/*    border-radius: 50%;*/
-/*    !*box-shadow: 0 6px 10px 0 #666;*!*/
-/*    transition: all 0.1s ease-in-out;*/
-/*    font-size: 25px;*/
-/*    color: white;*/
-/*    text-align: center;*/
-/*}*/
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+footer {
+    margin-top: auto;
+}
+
+nav {
+    height: 5em;
+}
+
+.form-control:focus {
+    box-shadow: none;
+}
+
+.form-control::placeholder {
+    font-size: 0.95rem;
+    color: #aaa;
+    font-style: italic;
+}
+
+.rounded-pill, .rounded-pill input {
+    border-radius: 1em !important;
+    /*background: #4e555b;*/
+}
+
+p.anim-header {
+    text-transform: uppercase;
+    letter-spacing: .5em;
+    color: rgba(255, 255, 255, .25);
+    display: inline-block;
+    border: 4px double rgba(255, 255, 255, .25);
+    border-right-width: 0;
+    border-left-width: 0;
+    padding: 1.5em 0;
+}
+
+p.anim-header span {
+    font: 700 4em/1 "Oswald", sans-serif;
+    letter-spacing: 0;
+    padding: .25em 0 .325em;
+    display: block;
+    margin: 0 auto;
+    text-shadow: 0 0 80px rgba(255, 255, 255, .5);
+
+    /* Clip Background Image */
+    background: url(http://f.cl.ly/items/010q3E1u3p2Q0j1L1S1o/animated_text_fill.png) repeat-y;
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    /* Animate Background Image */
+    -webkit-text-fill-color: transparent;
+    -webkit-animation: aitf 80s linear infinite;
+
+    /* Activate hardware acceleration for smoother animations */
+    -webkit-transform: translate3d(0, 0, 0);
+    -webkit-backface-visibility: hidden;
+}
+
+/* Animate Background Image */
+@-webkit-keyframes aitf {
+    0% {
+        background-position: 0 50%;
+    }
+    100% {
+        background-position: 100% 50%;
+    }
+}
+

@@ -9,6 +9,7 @@ use RuntimeException;
 class ArtistController extends AbstractCtrl
 {
     public $entityName = Artist::class;
+    public $dataHolder = 'artists';
     public $template = 'artists.html.twig';
 
     public function post(IRequest $request)
@@ -28,6 +29,6 @@ class ArtistController extends AbstractCtrl
 
         $this->db->persist($artist);
         $this->db->flush($artist);
-        return $this->render(null, ['artist' => $artist]);
+        return $this->render();
     }
 }

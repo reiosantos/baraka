@@ -24,6 +24,12 @@
 {% include 'header.html.twig' %}
 
 <div class="container-fluid">
+    {% include 'partials/jumbotron.html.twig' %}
+
+    {% block errors %}
+        {% include 'partials/error-message.html.twig' %}
+    {% endblock %}
+
     {% block body %}{% endblock %}
 </div>
 

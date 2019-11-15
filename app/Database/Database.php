@@ -10,6 +10,7 @@ namespace App\Database;
 
 
 use Doctrine\ORM as ORM;
+use Doctrine\ORM\QueryBuilder;
 
 class Database
 {
@@ -106,5 +107,49 @@ class Database
     public function delete(object $object): void
     {
         $this->getEntityManager()->remove($object);
+    }
+
+    /**
+     * @param string $entityName
+     * @param array $predicate ['like' => [], 'and' => [], 'or' => []]
+     * @return array
+     */
+    public function search(string $entityName, array $predicate): array
+    {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select(['u'])
+            ->from($entityName, 'u');
+
+        $parameters = [];
+        if (array_key_exists('like', $predicate)) {
+            $qb = $this->addFilter($qb, 'where', $predicate['like'], 'LOWER(u.%s) LIKE LOWER(:%s)');
+            $parameters = array_merge($parameters, $predicate['like']);
+        }
+        if (array_key_exists('and', $predicate)) {
+            $qb = $this->addFilter($qb, 'andWhere', $predicate['and'], 'LOWER(u.%s) = LOWER(:%s)');
+            $parameters = array_merge($parameters, $predicate['and']);
+        }
+        if (array_key_exists('or', $predicate)) {
+            $qb = $this->addFilter($qb, 'orWhere', $predicate['or'], 'LOWER(u.%s) = LOWER(:%s)');
+            $parameters = array_merge($parameters, $predicate['or']);
+        }
+        $qb = $qb->setParameters($parameters)->addOrderBy('u.id', 'ASC');
+        $query = $qb->getQuery();
+        return $query->getArrayResult();
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param string $fnName
+     * @param array $values
+     * @param string $query
+     * @return QueryBuilder
+     */
+    private function addFilter(QueryBuilder $qb, string $fnName, array $values, string $query): QueryBuilder
+    {
+        foreach ($values as $key => $value) {
+            $qb = $qb->{$fnName}(str_replace('%s', $key, $query));
+        }
+        return $qb;
     }
 }
