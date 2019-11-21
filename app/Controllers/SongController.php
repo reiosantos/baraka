@@ -14,6 +14,7 @@ use Twig\Error\SyntaxError;
 class SongController extends AbstractCtrl
 {
     public $entityName = Song::class;
+    public $dataHolder = 'songs';
     public $template = 'songs.html.twig';
 
     private function validateSong(?array $song, ?string $artistId): bool {
@@ -24,6 +25,18 @@ class SongController extends AbstractCtrl
             throw new RuntimeException('An artist for this song is required, but you did not select any.');
         }
         return true;
+    }
+
+    public function get(IRequest $request)
+    {
+        $search = $request->get('search');
+        if ($search) {
+            $data = $this->db->search($this->entityName, [
+                'like' => ['name' => '%' . $search . '%']
+            ]);
+            return $this->render($this->template, [$this->dataHolder => $data]);
+        }
+        return parent::get($request);
     }
 
     public function post(IRequest $request)
@@ -54,7 +67,7 @@ class SongController extends AbstractCtrl
         $this->db->persist($song);
         $this->db->flush($song);
 
-        return $this->render(null, ['song' => $song]);
+        return $this->render();
     }
 
     /**

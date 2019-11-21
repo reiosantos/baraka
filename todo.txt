@@ -2,4 +2,13 @@ Controllers:
     - Advertise
     - About
     - Privacy
-    -
+    - Contact/Feedback
+
+Features:
+    - Search functionality
+    - list all songs
+    - download a song
+    - add artist
+    - add a song
+    - Submit feedback
+    - Show feedback messages

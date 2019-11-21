@@ -9,6 +9,7 @@ use App\Utils\IRequest;
 class FeedbackController extends AbstractCtrl
 {
     public $entityName = Feedback::class;
+    public $dataHolder = 'feedback';
     public $template = 'feedback.html.twig';
 
     public function post(IRequest $request)

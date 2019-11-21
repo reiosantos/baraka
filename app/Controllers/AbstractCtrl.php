@@ -15,6 +15,7 @@ abstract class AbstractCtrl implements Controller
 {
     public $db;
     public $entityName;
+    public $dataHolder;
     private $twig;
     public $template;
 
@@ -29,9 +30,9 @@ abstract class AbstractCtrl implements Controller
     private function getResponseData(): array
     {
         return [
-            'songs' => $this->db->getRepository(Artist::class)->findAll(),
-            'artists' => $this->db->getRepository(Song::class)->findAll(),
-            'feedback' => $this->db->getRepository(Feedback::class)->findAll(),
+            'songs' => $this->db->findAll(Song::class),
+            'artists' => $this->db->findAll(Artist::class),
+            'feedback' => $this->db->findAll(Feedback::class),
         ];
     }
 
@@ -48,7 +49,7 @@ abstract class AbstractCtrl implements Controller
         if (!$template || $template === null) {
             $template = $this->template;
         }
-        if (!$this->template) {
+        if (!$template) {
             throw InvalidTemplateSpecified::notFoundOrNotReadable($template);
         }
         $merged = array_merge($this->getResponseData(), $context);
@@ -84,15 +85,15 @@ abstract class AbstractCtrl implements Controller
     public function get(IRequest $request) {
         $pk = $request->getObjectPk();
         if ($pk === null) {
-            $data = $this->db->getRepository($this->entityName)->findAll();
+            $data = $this->db->findAll($this->entityName);
         } else {
-            $data = $this->db->getRepository($this->entityName)->find($pk);
+            $data = $this->db->findOneAndReturnArray($this->entityName, $pk);
             if ($data === null) {
                 throw new RuntimeException('No Result Found');
             }
         }
         if ($this->template) {
-            return $this->render($this->template, ['data' => $data]);
+            return $this->render($this->template, [$this->dataHolder => $data]);
         }
         return $data;
     }

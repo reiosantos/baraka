@@ -44,7 +44,7 @@ class Request implements IRequest
             $this->queryString = $this->server['QUERY_STRING'];
         }
         $this->host = $this->server['HTTP_HOST'];
-        $this->requestUri = $this->server['REQUEST_URI'];
+        $this->requestUri = explode('?', $this->server['REQUEST_URI'], 2)[0];
     }
 
     public function redirectToHome(?string $to = null): void
@@ -82,7 +82,7 @@ class Request implements IRequest
         // in the form /controller/pk/
         $action = explode('/', $this->requestUri);
         if (count($action) <= 1 || $action[1] === '') {
-            return 'songs';
+            return 'song';
         }
         return $action[1];
 

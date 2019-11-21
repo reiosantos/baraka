@@ -32,7 +32,7 @@ class Song extends Uploader
     private $name;
 
     /**
-     * @var string|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="upload_date", type="datetime")
      */
@@ -90,7 +90,7 @@ class Song extends Uploader
      */
     public function getUploadDate(): ?string
     {
-        return $this->uploadDate;
+        return $this->uploadDate->format('Y-m-d H:i:s');
     }
 
     /**

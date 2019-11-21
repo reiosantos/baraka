@@ -10,6 +10,7 @@ namespace App\Database;
 
 
 use Doctrine\ORM as ORM;
+use Doctrine\ORM\QueryBuilder;
 
 class Database
 {
@@ -41,6 +42,49 @@ class Database
      */
     public function find(string $entityName, $id, int $lockMode = null, int $lockVersion = null): ?object {
 	    return $this->entityManager->find($entityName, $id, $lockMode, $lockVersion);
+    }
+
+    /**
+     * Finds an Entity by its identifier and returns it in an array.
+     *
+     * @param string $entityName The class name of the entity to find.
+     * @param mixed $id The identity of the entity to find.
+     * @param integer|null $lockMode One of the \Doctrine\DBAL\LockMode::* constants
+     *                                  or NULL if no specific lock mode should be used
+     *                                  during the search.
+     * @param integer|null $lockVersion The version of the entity to find when using
+     *                                  optimistic locking.
+     *
+     * @return object|null The entity instance or NULL if the entity can not be found.
+     *
+     * @throws ORM\OptimisticLockException
+     * @throws ORM\ORMInvalidArgumentException
+     * @throws ORM\TransactionRequiredException
+     * @throws ORM\ORMException
+     */
+    public function findOneAndReturnArray(
+        string $entityName, $id, int $lockMode = null, int $lockVersion = null): ?array
+    {
+        $data = $this->find($entityName, $id, $lockMode, $lockVersion);
+        if (!$data) {
+            return $data;
+        }
+        if (is_array($data)) {
+            return $data;
+        }
+        return [$data];
+    }
+
+    /**
+     * @param string $entityName
+     * @return array
+     */
+    public function findAll(string $entityName): array
+    {
+        return $this->getRepository($entityName)
+            ->createQueryBuilder('c')
+            ->getQuery()
+            ->getResult(ORM\Query::HYDRATE_OBJECT);
     }
 
     /**
@@ -106,5 +150,49 @@ class Database
     public function delete(object $object): void
     {
         $this->getEntityManager()->remove($object);
+    }
+
+    /**
+     * @param string $entityName
+     * @param array $predicate ['like' => [], 'and' => [], 'or' => []]
+     * @return array
+     */
+    public function search(string $entityName, array $predicate): array
+    {
+        $qb = $this->entityManager->createQueryBuilder()
+            ->select(['u'])
+            ->from($entityName, 'u');
+
+        $parameters = [];
+        if (array_key_exists('like', $predicate)) {
+            $qb = $this->addFilter($qb, 'where', $predicate['like'], 'LOWER(u.%s) LIKE LOWER(:%s)');
+            $parameters = array_merge($parameters, $predicate['like']);
+        }
+        if (array_key_exists('and', $predicate)) {
+            $qb = $this->addFilter($qb, 'andWhere', $predicate['and'], 'LOWER(u.%s) = LOWER(:%s)');
+            $parameters = array_merge($parameters, $predicate['and']);
+        }
+        if (array_key_exists('or', $predicate)) {
+            $qb = $this->addFilter($qb, 'orWhere', $predicate['or'], 'LOWER(u.%s) = LOWER(:%s)');
+            $parameters = array_merge($parameters, $predicate['or']);
+        }
+        $qb = $qb->setParameters($parameters)->addOrderBy('u.id', 'ASC');
+        $query = $qb->getQuery();
+        return $query->getResult(ORM\Query::HYDRATE_OBJECT);
+    }
+
+    /**
+     * @param QueryBuilder $qb
+     * @param string $fnName
+     * @param array $values
+     * @param string $query
+     * @return QueryBuilder
+     */
+    private function addFilter(QueryBuilder $qb, string $fnName, array $values, string $query): QueryBuilder
+    {
+        foreach ($values as $key => $value) {
+            $qb = $qb->{$fnName}(str_replace('%s', $key, $query));
+        }
+        return $qb;
     }
 }
