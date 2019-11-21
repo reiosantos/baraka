@@ -75,3 +75,10 @@ p.anim-header span {
     }
 }
 
+.card {
+    margin: 2em;
+}
+
+.img-thumbnail {
+    max-height: 150px;
+}

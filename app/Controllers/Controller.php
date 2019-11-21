@@ -19,10 +19,13 @@ interface Controller
 
     /**
      * @param IRequest $request
-     * @return ORM\Mapping\Entity[]|array|object|null
+     * @return array|ORM\Mapping\Entity[]|array|object|null
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws ORM\ORMException
+     * @throws ORM\OptimisticLockException
+     * @throws ORM\TransactionRequiredException
      */
     public function get(IRequest $request);
 

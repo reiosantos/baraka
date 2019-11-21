@@ -45,6 +45,49 @@ class Database
     }
 
     /**
+     * Finds an Entity by its identifier and returns it in an array.
+     *
+     * @param string $entityName The class name of the entity to find.
+     * @param mixed $id The identity of the entity to find.
+     * @param integer|null $lockMode One of the \Doctrine\DBAL\LockMode::* constants
+     *                                  or NULL if no specific lock mode should be used
+     *                                  during the search.
+     * @param integer|null $lockVersion The version of the entity to find when using
+     *                                  optimistic locking.
+     *
+     * @return object|null The entity instance or NULL if the entity can not be found.
+     *
+     * @throws ORM\OptimisticLockException
+     * @throws ORM\ORMInvalidArgumentException
+     * @throws ORM\TransactionRequiredException
+     * @throws ORM\ORMException
+     */
+    public function findOneAndReturnArray(
+        string $entityName, $id, int $lockMode = null, int $lockVersion = null): ?array
+    {
+        $data = $this->find($entityName, $id, $lockMode, $lockVersion);
+        if (!$data) {
+            return $data;
+        }
+        if (is_array($data)) {
+            return $data;
+        }
+        return [$data];
+    }
+
+    /**
+     * @param string $entityName
+     * @return array
+     */
+    public function findAll(string $entityName): array
+    {
+        return $this->getRepository($entityName)
+            ->createQueryBuilder('c')
+            ->getQuery()
+            ->getResult(ORM\Query::HYDRATE_OBJECT);
+    }
+
+    /**
      * Tells the EntityManager to make an instance managed and persistent.
      *
      * The entity will be entered into the database at or before transaction
@@ -135,7 +178,7 @@ class Database
         }
         $qb = $qb->setParameters($parameters)->addOrderBy('u.id', 'ASC');
         $query = $qb->getQuery();
-        return $query->getArrayResult();
+        return $query->getResult(ORM\Query::HYDRATE_OBJECT);
     }
 
     /**
