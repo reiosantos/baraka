@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="row">
+        <div class="col-sm-12 col-md-4 col-lg-4 shadow-3">
+            <div class="text-left text-wrap border-bottom font-weight-bold fa-2x mb-4">
+                Media Artists
+            </div>
+            {% include "admin/artists.html.twig" %}
+        </div>
+
+        <div class="col-sm-12 col-md-4 col-lg-4 shadow-3">
+            <div class="text-left text-wrap border-bottom font-weight-bold fa-2x mb-4">
+                Media/Songs(Audio)
+            </div>
+            <form class="">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01"
+                               aria-describedby="inputGroupFileAddon01">
+                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-12 col-md-4 col-lg-4">
+            <div class="text-left text-wrap border-bottom font-weight-bold fa-2x mb-4">
+                Messages to you.
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

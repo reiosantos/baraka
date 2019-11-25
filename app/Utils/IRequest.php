@@ -18,4 +18,8 @@ interface IRequest
     public function getFile(string $param): ?array;
     public function getFilesArray(): ?array;
     public function cleanData(string $data): string;
+
+    public function addToSession(string $key, string $value = null): void;
+
+    public function getFromSession(string $key): ?string;
 }

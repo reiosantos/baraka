@@ -12,7 +12,7 @@ namespace App\Database;
 use Doctrine\ORM as ORM;
 use Doctrine\ORM\QueryBuilder;
 
-class Database
+class Database implements IDatabase
 {
 	private $entityManager;
 
@@ -23,51 +23,21 @@ class Database
 	}
 
     /**
-     * Finds an Entity by its identifier.
-     *
-     * @param string       $entityName  The class name of the entity to find.
-     * @param mixed        $id          The identity of the entity to find.
-     * @param integer|null $lockMode    One of the \Doctrine\DBAL\LockMode::* constants
-     *                                  or NULL if no specific lock mode should be used
-     *                                  during the search.
-     * @param integer|null $lockVersion The version of the entity to find when using
-     *                                  optimistic locking.
-     *
-     * @return object|null The entity instance or NULL if the entity can not be found.
-     *
-     * @throws ORM\OptimisticLockException
-     * @throws ORM\ORMInvalidArgumentException
-     * @throws ORM\TransactionRequiredException
-     * @throws ORM\ORMException
+     * {@inheritDoc}
      */
     public function find(string $entityName, $id, int $lockMode = null, int $lockVersion = null): ?object {
 	    return $this->entityManager->find($entityName, $id, $lockMode, $lockVersion);
     }
 
     /**
-     * Finds an Entity by its identifier and returns it in an array.
-     *
-     * @param string $entityName The class name of the entity to find.
-     * @param mixed $id The identity of the entity to find.
-     * @param integer|null $lockMode One of the \Doctrine\DBAL\LockMode::* constants
-     *                                  or NULL if no specific lock mode should be used
-     *                                  during the search.
-     * @param integer|null $lockVersion The version of the entity to find when using
-     *                                  optimistic locking.
-     *
-     * @return object|null The entity instance or NULL if the entity can not be found.
-     *
-     * @throws ORM\OptimisticLockException
-     * @throws ORM\ORMInvalidArgumentException
-     * @throws ORM\TransactionRequiredException
-     * @throws ORM\ORMException
+     * {@inheritDoc}
      */
     public function findOneAndReturnArray(
         string $entityName, $id, int $lockMode = null, int $lockVersion = null): ?array
     {
         $data = $this->find($entityName, $id, $lockMode, $lockVersion);
         if (!$data) {
-            return $data;
+            return null;
         }
         if (is_array($data)) {
             return $data;
@@ -76,32 +46,22 @@ class Database
     }
 
     /**
-     * @param string $entityName
-     * @return array
+     * {@inheritDoc}
      */
-    public function findAll(string $entityName): array
+    public function findAll(string $entityName, string $orderBy = null, bool $isAsc = true): array
     {
+        $orderBy = $orderBy ?? 'ID';
+        $order = $isAsc ? 'ASC' : 'DESC';
+
         return $this->getRepository($entityName)
             ->createQueryBuilder('c')
+//            ->addOrderBy("c.$orderBy", $order)
             ->getQuery()
             ->getResult(ORM\Query::HYDRATE_OBJECT);
     }
 
     /**
-     * Tells the EntityManager to make an instance managed and persistent.
-     *
-     * The entity will be entered into the database at or before transaction
-     * commit or as a result of the flush operation.
-     *
-     * NOTE: The persist operation always considers entities that are not yet known to
-     * this EntityManager as NEW. Do not pass detached entities to the persist operation.
-     *
-     * @param object $entity The instance to make managed and persistent.
-     *
-     * @return void
-     *
-     * @throws ORM\ORMInvalidArgumentException
-     * @throws ORM\ORMException
+     * {@inheritDoc}
      */
     public function persist(object $entity): void
     {
@@ -109,20 +69,7 @@ class Database
     }
 
     /**
-     * Flushes all changes to objects that have been queued up to now to the database.
-     * This effectively synchronizes the in-memory state of managed objects with the
-     * database.
-     *
-     * If an entity is explicitly passed to this method only this entity and
-     * the cascade-persist semantics + scheduled inserts/removals are synchronized.
-     *
-     * @param null|object|array $entity
-     *
-     * @return void
-     *
-     * @throws ORM\OptimisticLockException If a version check on an entity that
-     *         makes use of optimistic locking fails.
-     * @throws ORM\ORMException
+     * {@inheritDoc}
      */
     public function flush($entity = null): void
     {
@@ -130,9 +77,7 @@ class Database
     }
 
     /**
-     * * Gets the repository for an entity class.
-     * @param string $entityName The name of the entity.
-     * @return ORM\EntityRepository
+     * {@inheritDoc}
      */
     public function getRepository(string $entityName): ORM\EntityRepository {
         return $this->entityManager->getRepository($entityName);
@@ -145,7 +90,7 @@ class Database
         return $this->entityManager;
     }
     /**
-     * @param object $object
+     * {@inheritDoc}
      */
     public function delete(object $object): void
     {
@@ -153,9 +98,7 @@ class Database
     }
 
     /**
-     * @param string $entityName
-     * @param array $predicate ['like' => [], 'and' => [], 'or' => []]
-     * @return array
+     * {@inheritDoc}
      */
     public function search(string $entityName, array $predicate): array
     {

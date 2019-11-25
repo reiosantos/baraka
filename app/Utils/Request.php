@@ -32,6 +32,10 @@ class Request implements IRequest
         $this->request = $_REQUEST;
         $this->server = $_SERVER;
         $this->files = $_FILES;
+
+        if (!isset($_SESSION)) {
+            session_start();
+        }
         $this->populateRequestObject();
     }
 
@@ -104,7 +108,11 @@ class Request implements IRequest
         // This is used if the application is running in docker and/or the .htaccess is
         // working/ is able to resolve the path names
         // in the form /controller/pk/
+        // or /admin/controller/pk/
         $uri = explode('/', $this->requestUri);
+        if ($this->getControllerName() === 'admin') {
+            return array_slice($uri, 3);
+        }
         return array_slice($uri, 2);
 
         // use below if server not running in docker or the .htaccess is not working for soe reason
@@ -157,5 +165,18 @@ class Request implements IRequest
     public function cleanData(string $data): string
     {
         return htmlentities(htmlspecialchars($data), ENT_QUOTES);
+    }
+
+    public function addToSession(string $key, string $value = null): void
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    public function getFromSession(string $key): ?string
+    {
+        if (array_key_exists($key, $_SESSION)) {
+            return $_SESSION[$key];
+        }
+        return null;
     }
 }
