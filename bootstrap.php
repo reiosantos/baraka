@@ -5,7 +5,6 @@ use App\Database\Database;
 use App\Utils\Request;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-use Twig\TwigFunction;
 
 $APP_DIR = '/app';
 $APP_PATH = __DIR__ . $APP_DIR;
@@ -20,7 +19,7 @@ $params = [
     'auto_reload' => true,
     'debug' => true,
     'autoescape' => 'html',
-    'strict_variables' => true
+    'strict_variables' => false
 ];
 
 global $database;
@@ -31,22 +30,9 @@ $request = new Request();
 $twig = new Environment($loader, $params);
 
 $twig->addGlobal('base_path', $APP_DIR);
+$twig->addGlobal('base_url', $request->getBaseUrl());
 $twig->addGlobal('js_path', $APP_DIR . '/static/js/');
 $twig->addGlobal('css_path', $APP_DIR . '/static/css/');
-
-$twig->addFunction(
-    new TwigFunction(
-        'form_token',
-        static function () {
-            global $request;
-
-            if (empty($request->getFromSession('token'))) {
-                $request->addToSession('token', bin2hex(random_bytes(32)));
-            }
-            return $request->getFromSession('token');
-        }
-    )
-);
 
 $twig->addGlobal('current_route', $request->getControllerName());
 

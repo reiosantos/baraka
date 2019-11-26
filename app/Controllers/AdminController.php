@@ -24,8 +24,6 @@ class AdminController extends AbstractCtrl
      */
     public function post(IRequest $request)
     {
-        $this->validateToken($request);
-
         $model = $request->get('model');
         switch ($model) {
             case 'artist':
@@ -33,7 +31,7 @@ class AdminController extends AbstractCtrl
             case 'song':
                 return $this->addSong($request);
             default:
-                throw new RuntimeException('Could not process this request. Unknown model token');
+                throw new RuntimeException("Could not process this request. Unknown model $model");
         }
     }
 
@@ -111,7 +109,7 @@ class AdminController extends AbstractCtrl
 
     private function validateSong(?array $song, ?string $artistId): bool
     {
-        if ($song === null) {
+        if ($song === null || empty($song['name'])) {
             throw new RuntimeException('A song is required, but you did not upload any.');
         }
         if ($artistId === null) {

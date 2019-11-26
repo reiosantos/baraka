@@ -5,10 +5,11 @@ Controllers:
     - Contact/Feedback
 
 Features:
-    - Search functionality
-    - list all songs
-    - download a song
-    - add artist
-    - add a song
+    - Search functionality - DONE
+    - list all songs - DONE
+    - download a song - DONE
+    - add artist - DONE
+    - add a song - DONE
     - Submit feedback
     - Show feedback messages
+    - Validate song upload

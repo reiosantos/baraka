@@ -97,3 +97,12 @@ p.anim-header span {
 .accordion .card-header {
     padding: 0;
 }
+
+.nav-pills .nav-link {
+    color: black;
+}
+
+.nav-pills .nav-link.active {
+    background: #e3601c;
+    color: white;
+}

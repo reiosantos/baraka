@@ -20,29 +20,16 @@ abstract class AbstractCtrl implements Controller
     public $dataHolder;
     private $twig;
     public $template;
+    public $request;
 
     public function __construct()
     {
         global $database;
         global $twig;
+        global $request;
         $this->db = $database;
         $this->twig = $twig;
-    }
-
-    public function validateToken(IRequest $request): bool
-    {
-        if ($request->getFromSession('token') !== $request->get('token')) {
-            $this->clearOldToken($request);
-            throw new RuntimeException('Token Expired: Form resubmission not allowed.');
-        }
-        $this->clearOldToken($request);
-        return true;
-    }
-
-    public function clearOldToken(IRequest $request): void
-    {
-        $request->addToSession('tokenOld', $request->getFromSession('token'));
-        $request->addToSession('token', null);
+        $this->request = $request;
     }
 
     /**
@@ -75,7 +62,11 @@ abstract class AbstractCtrl implements Controller
         if (!$template) {
             throw InvalidTemplateSpecified::notFoundOrNotReadable($template);
         }
-        $merged = array_merge($this->getResponseData(), $context);
+        $essentialData = [
+            'csrf_token' => $this->request->generateToken()
+        ];
+
+        $merged = array_merge($this->getResponseData(), $context, $essentialData);
         $this->twig->display($template, $merged);
         return null;
     }
@@ -92,6 +83,10 @@ abstract class AbstractCtrl implements Controller
         try {
             $method = $request->getRequestMethod();
             $action = $request->getAction();
+
+            if ($method === 'post') {
+                $request->validateToken();
+            }
 
             if ($action && method_exists($this, $action)) {
                 return $this->{$action}($request);

@@ -14,7 +14,6 @@ class FeedbackController extends AbstractCtrl
 
     public function post(IRequest $request)
     {
-        $this->validateToken($request);
         $name = $request->get('name');
         $email = $request->get('email');
         $location = $request->get('location');

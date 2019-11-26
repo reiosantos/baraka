@@ -2,36 +2,27 @@
 
 {% block body %}
 
-    <div class="row">
-        <div class="col-sm-12 col-md-4 col-lg-4 shadow-3">
-            <div class="text-left text-wrap border-bottom font-weight-bold fa-2x mb-4">
-                Media Artists
-            </div>
+    <ul class="nav nav-pills nav-justified">
+        <li class="nav-item" onclick="updateUrl('artists')">
+            <a data-toggle="pill" class="nav-link" href="#artists">Artists</a>
+        </li>
+        <li class="nav-item" onclick="updateUrl('songs')">
+            <a data-toggle="pill" class="nav-link" href="#songs">Songs</a>
+        </li>
+        <li class="nav-item" onclick="updateUrl('feedback')">
+            <a data-toggle="pill" class="nav-link" href="#feedback">Feedback</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mt-5">
+        <div id="artists" class="tab-pane fade in active">
             {% include "admin/artists.html.twig" %}
         </div>
-
-        <div class="col-sm-12 col-md-4 col-lg-4 shadow-3">
-            <div class="text-left text-wrap border-bottom font-weight-bold fa-2x mb-4">
-                Media/Songs(Audio)
-            </div>
-            <form class="">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                    </div>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile01"
-                               aria-describedby="inputGroupFileAddon01">
-                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                    </div>
-                </div>
-            </form>
+        <div id="songs" class="tab-pane fade">
+            {% include "admin/songs.html.twig" %}
         </div>
-
-        <div class="col-sm-12 col-md-4 col-lg-4">
-            <div class="text-left text-wrap border-bottom font-weight-bold fa-2x mb-4">
-                Messages to you.
-            </div>
+        <div id="feedback" class="tab-pane fade">
+            <h3>Messages to you.</h3>
         </div>
     </div>
 

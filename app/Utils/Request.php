@@ -3,6 +3,9 @@
 namespace App\Utils;
 
 
+use Exception;
+use RuntimeException;
+
 /** @noinspection ClassNameCollisionInspection */
 
 /**
@@ -26,6 +29,8 @@ class Request implements IRequest
     private $queryString;
     private $host;
     private $requestUri;
+
+    private const TOKEN_KEY = 'csrf_token';
 
     public function __construct()
     {
@@ -62,7 +67,15 @@ class Request implements IRequest
 
     public function getRequestMethod(): ?string
     {
-       return $this->method;
+        return $this->method;
+    }
+
+    public function getBaseUrl(): string
+    {
+        if ($this->getControllerName() === 'admin') {
+            return '/admin/';
+        }
+        return '/';
     }
 
     public function getQueryString(): ?string{
@@ -155,7 +168,7 @@ class Request implements IRequest
 
     public function getFilesArray(): ?array
     {
-         return $this->files;
+        return $this->files;
     }
 
     /**
@@ -178,5 +191,29 @@ class Request implements IRequest
             return $_SESSION[$key];
         }
         return null;
+    }
+
+    /**
+     * @return string|null
+     * @throws Exception
+     */
+    public function generateToken(): ?string
+    {
+        $tkn = bin2hex(random_bytes(32));
+        $this->addToSession(self::TOKEN_KEY, $tkn);
+        return $this->getFromSession(self::TOKEN_KEY);
+    }
+
+    public function validateToken(): bool
+    {
+        if ($this->getFromSession(self::TOKEN_KEY) !== $this->get(self::TOKEN_KEY)) {
+            throw new RuntimeException('Token Expired: Form resubmission not allowed.');
+        }
+        return true;
+    }
+
+    public function clearOldToken(): void
+    {
+        $this->addToSession(self::TOKEN_KEY, null);
     }
 }
