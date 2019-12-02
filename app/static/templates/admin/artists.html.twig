@@ -1,0 +1,79 @@
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-12 offset-lg-2 offset-md-2 offset-sm-0">
+        <form class="" action="{{ base_url }}artist#artists" method="post"
+              enctype="multipart/form-data">
+            <input type="hidden" name="model" value="artist"/>
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Artist Name</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Name of artist"
+                       name="name" aria-label="Name of artist"
+                       aria-describedby="basic-addon1"/>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Details:</span>
+                </div>
+                <textarea name="details" class="form-control" aria-label="Details"></textarea>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" name="photo" class="custom-file-input" id="inputGroupFile01"
+                           aria-describedby="inputGroupFileAddon01" accept="image/*"/>
+                    <label class="custom-file-label" for="inputGroupFile01">Choose Photo
+                        file</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-secondary btn-lg btn-block">Save</button>
+        </form>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="accordion" id="accordionExample">
+            {% for artist in artists %}
+                {% set art = artist.getPhotoName() %}
+                {% set src = art ? artist.getWebPath(art) : 'https://i.imgur.com/Mpj9ecV.jpg' %}
+                {% set id = artist.getId() %}
+
+                <div class="card">
+                    <div class="card-header" id="heading{{ id }}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse{{ id }}" aria-expanded="true"
+                                    aria-controls="collapse{{ id }}">
+                                {{ artist.getName() }}
+                            </button>
+                        </h2>
+                    </div>
+
+                    <div id="collapse{{ id }}" class="collapse" aria-labelledby="heading{{ id }}"
+                         data-parent="#accordionExample">
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-xl-4 col-sm-12 d-flex">
+                                    <img
+                                        class="img-thumbnail"
+                                        width="100%"
+                                        height="100%"
+                                        src="{{ src }}"
+                                        alt="Card image cap"/>
+                                </div>
+                                <div class="col-lg-8 col-md-8 col-xl-8 col-sm-12">
+                                    {{ artist.getDetails() }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

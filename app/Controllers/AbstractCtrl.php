@@ -15,24 +15,33 @@ abstract class AbstractCtrl implements Controller
 {
     public $db;
     public $entityName;
+    public $sortColumn = 'ID';
+    public $isAscending = true;
     public $dataHolder;
     private $twig;
     public $template;
+    public $request;
 
     public function __construct()
     {
         global $database;
         global $twig;
+        global $request;
         $this->db = $database;
         $this->twig = $twig;
+        $this->request = $request;
     }
 
+    /**
+     * @return array
+     * @throws Exception
+     */
     private function getResponseData(): array
     {
         return [
-            'songs' => $this->db->findAll(Song::class),
-            'artists' => $this->db->findAll(Artist::class),
-            'feedback' => $this->db->findAll(Feedback::class),
+            'songs' => $this->db->findAll(Song::class, 'name'),
+            'artists' => $this->db->findAll(Artist::class, 'name'),
+            'feedback' => $this->db->findAll(Feedback::class, 'upload_date'),
         ];
     }
 
@@ -43,6 +52,7 @@ abstract class AbstractCtrl implements Controller
      * @throws TwigError\LoaderError
      * @throws TwigError\RuntimeError
      * @throws TwigError\SyntaxError
+     * @throws Exception
      */
     final public function render(?string $template = null, array $context = []): ?string
     {
@@ -52,7 +62,11 @@ abstract class AbstractCtrl implements Controller
         if (!$template) {
             throw InvalidTemplateSpecified::notFoundOrNotReadable($template);
         }
-        $merged = array_merge($this->getResponseData(), $context);
+        $essentialData = [
+            'csrf_token' => $this->request->generateToken()
+        ];
+
+        $merged = array_merge($this->getResponseData(), $context, $essentialData);
         $this->twig->display($template, $merged);
         return null;
     }
@@ -70,6 +84,10 @@ abstract class AbstractCtrl implements Controller
             $method = $request->getRequestMethod();
             $action = $request->getAction();
 
+            if ($method === 'post') {
+                $request->validateToken();
+            }
+
             if ($action && method_exists($this, $action)) {
                 return $this->{$action}($request);
             }
@@ -85,7 +103,7 @@ abstract class AbstractCtrl implements Controller
     public function get(IRequest $request) {
         $pk = $request->getObjectPk();
         if ($pk === null) {
-            $data = $this->db->findAll($this->entityName);
+            $data = $this->db->findAll($this->entityName, $this->sortColumn, $this->isAscending);
         } else {
             $data = $this->db->findOneAndReturnArray($this->entityName, $pk);
             if ($data === null) {
@@ -111,8 +129,13 @@ abstract class AbstractCtrl implements Controller
         return $this->render(null, ['success' => 'Deletion Successful']);
     }
 
+    public function post(IRequest $request)
+    {
+        throw new RuntimeException('Method Not Implemented.');
+    }
+
     public function put(IRequest $request)
     {
-        return $this->render($this->template);
+        throw new RuntimeException('Method Not Implemented.');
     }
 }

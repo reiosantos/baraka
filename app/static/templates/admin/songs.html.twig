@@ -1,0 +1,81 @@
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-12 offset-lg-2 offset-md-2 offset-sm-0">
+        <form class="form" action="{{ base_url }}song#songs" method="post"
+              enctype="multipart/form-data">
+            <input type="hidden" name="model" value="song"/>
+
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Artist</span>
+                </div>
+                <select class="form-control" name="artist" aria-label="Artist">
+                    <option>---------------- SELECT ARTIST -----------------</option>
+                    {% for artist in artists %}
+                        <option value="{{ artist.getId() }}">{{ artist.getName() }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon1">Song Title</span>
+                </div>
+                <input type="text" class="form-control" placeholder="Song Title"
+                       name="name" aria-label="Name of artist"
+                       aria-describedby="basic-addon1"/>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon01">
+                        Album Art Upload
+                    </span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" name="albumArt" class="custom-file-input"
+                           id="inputGroupFile01"
+                           aria-describedby="inputGroupFileAddon01" accept="image/*"/>
+                    <label class="custom-file-label" for="inputGroupFile01">Choose Album Art</label>
+                </div>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroupFileAddon02">Song Upload</span>
+                </div>
+                <div class="custom-file">
+                    <input type="file" name="song" class="custom-file-input"
+                           id="inputGroupFile02" accept="audio/*"
+                           aria-describedby="inputGroupFileAddon02"/>
+                    <label class="custom-file-label" for="inputGroupFile02">Choose Song</label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-secondary btn-lg btn-block">Save</button>
+        </form>
+    </div>
+
+    <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="accordion" id="accordionExample">
+            {% for song in songs %}
+                {% set id = song.getId() %}
+
+                <div class="card">
+                    <div class="card-header" id="heading{{ id }}">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link" type="button" data-toggle="collapse"
+                                    data-target="#collapse{{ id }}" aria-expanded="true"
+                                    aria-controls="collapse{{ id }}">
+                                <span class="text-dark font-weight-bold">{{ song.getName() }}</span>
+                                - By: {{ song.getArtist().getName() }}
+                            </button>
+                            <a href="/song/{{ id }}/download/" target="_blank"
+                               class="btn btn-sm text-primary btn-warning text-dark pull-right">
+                                Download
+                            </a>
+                        </h2>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

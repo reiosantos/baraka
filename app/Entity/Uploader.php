@@ -42,7 +42,7 @@ abstract class Uploader extends BaseModel
     /**
      * @return array
      */
-    public function getFiles(): array
+    public function getFiles(): ?array
     {
         return $this->files;
     }

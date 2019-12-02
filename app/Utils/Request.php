@@ -3,6 +3,9 @@
 namespace App\Utils;
 
 
+use Exception;
+use RuntimeException;
+
 /** @noinspection ClassNameCollisionInspection */
 
 /**
@@ -27,11 +30,17 @@ class Request implements IRequest
     private $host;
     private $requestUri;
 
+    private const TOKEN_KEY = 'csrf_token';
+
     public function __construct()
     {
         $this->request = $_REQUEST;
         $this->server = $_SERVER;
         $this->files = $_FILES;
+
+        if (!isset($_SESSION)) {
+            session_start();
+        }
         $this->populateRequestObject();
     }
 
@@ -58,7 +67,15 @@ class Request implements IRequest
 
     public function getRequestMethod(): ?string
     {
-       return $this->method;
+        return $this->method;
+    }
+
+    public function getBaseUrl(): string
+    {
+        if ($this->getControllerName() === 'admin') {
+            return '/admin/';
+        }
+        return '/';
     }
 
     public function getQueryString(): ?string{
@@ -104,7 +121,11 @@ class Request implements IRequest
         // This is used if the application is running in docker and/or the .htaccess is
         // working/ is able to resolve the path names
         // in the form /controller/pk/
+        // or /admin/controller/pk/
         $uri = explode('/', $this->requestUri);
+        if ($this->getControllerName() === 'admin') {
+            return array_slice($uri, 3);
+        }
         return array_slice($uri, 2);
 
         // use below if server not running in docker or the .htaccess is not working for soe reason
@@ -147,7 +168,7 @@ class Request implements IRequest
 
     public function getFilesArray(): ?array
     {
-         return $this->files;
+        return $this->files;
     }
 
     /**
@@ -157,5 +178,42 @@ class Request implements IRequest
     public function cleanData(string $data): string
     {
         return htmlentities(htmlspecialchars($data), ENT_QUOTES);
+    }
+
+    public function addToSession(string $key, string $value = null): void
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    public function getFromSession(string $key): ?string
+    {
+        if (array_key_exists($key, $_SESSION)) {
+            return $_SESSION[$key];
+        }
+        return null;
+    }
+
+    /**
+     * @return string|null
+     * @throws Exception
+     */
+    public function generateToken(): ?string
+    {
+        $tkn = bin2hex(random_bytes(32));
+        $this->addToSession(self::TOKEN_KEY, $tkn);
+        return $this->getFromSession(self::TOKEN_KEY);
+    }
+
+    public function validateToken(): bool
+    {
+        if ($this->getFromSession(self::TOKEN_KEY) !== $this->get(self::TOKEN_KEY)) {
+            throw new RuntimeException('Token Expired: Form resubmission not allowed.');
+        }
+        return true;
+    }
+
+    public function clearOldToken(): void
+    {
+        $this->addToSession(self::TOKEN_KEY, null);
     }
 }

@@ -4,10 +4,10 @@
 
     {% include 'search.html.twig' %}
 
-    <div class="card-columns ml-5 mr-5 mb-5">
+    <div class="card-columns ml-5 mr-5">
         {% for song in songs %}
             {% set art = song.getAlbumArtName() %}
-            {% set src = art ? song.getWebPath(song.getAlbumArtName()) : 'https://i.imgur.com/Mpj9ecV.jpg' %}
+            {% set src = art ? song.getWebPath(art) : 'https://i.imgur.com/Mpj9ecV.jpg' %}
 
             <div class="card">
                 <div class="row">

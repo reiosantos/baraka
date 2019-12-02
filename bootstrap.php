@@ -19,19 +19,20 @@ $params = [
     'auto_reload' => true,
     'debug' => true,
     'autoescape' => 'html',
-    'strict_variables' => true
+    'strict_variables' => false
 ];
 
+global $database;
 global $twig;
+
+$database = new Database();
+$request = new Request();
 $twig = new Environment($loader, $params);
 
 $twig->addGlobal('base_path', $APP_DIR);
+$twig->addGlobal('base_url', $request->getBaseUrl());
 $twig->addGlobal('js_path', $APP_DIR . '/static/js/');
 $twig->addGlobal('css_path', $APP_DIR . '/static/css/');
-
-global $database;
-$database = new Database();
-$request = new Request();
 
 $twig->addGlobal('current_route', $request->getControllerName());
 
