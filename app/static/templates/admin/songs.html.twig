@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-lg-4 col-md-4 col-sm-12 offset-lg-2 offset-md-2 offset-sm-0">
+    <div class="col-lg-5 col-md-5 col-sm-12 mb-3">
         <form class="form" action="{{ base_url }}song#songs" method="post"
               enctype="multipart/form-data">
             <input type="hidden" name="model" value="song"/>
@@ -54,7 +54,7 @@
         </form>
     </div>
 
-    <div class="col-lg-4 col-md-4 col-sm-12">
+    <div class="col-lg-7 col-md-7 col-sm-12">
         <div class="accordion" id="accordionExample">
             {% for song in songs %}
                 {% set id = song.getId() %}
@@ -62,9 +62,8 @@
                 <div class="card">
                     <div class="card-header" id="heading{{ id }}">
                         <h2 class="mb-0">
-                            <button class="btn btn-link" type="button" data-toggle="collapse"
-                                    data-target="#collapse{{ id }}" aria-expanded="true"
-                                    aria-controls="collapse{{ id }}">
+                            <button class="btn btn-link" type="button"
+                                    style="max-width: 100%; white-space: inherit">
                                 <span class="text-dark font-weight-bold">{{ song.getName() }}</span>
                                 - By: {{ song.getArtist().getName() }}
                             </button>

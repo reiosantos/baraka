@@ -51,7 +51,7 @@ class Feedback extends BaseModel
     private $message;
 
     /**
-     * @var string|null
+     * @var DateTime|null
      *
      * @ORM\Column(name="upload_date", type="datetime")
      */
@@ -142,7 +142,7 @@ class Feedback extends BaseModel
      */
     public function getDate(): ?string
     {
-        return $this->date;
+        return $this->date->format('D, jS Y H:i');
     }
 
     /**

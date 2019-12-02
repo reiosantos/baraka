@@ -4,41 +4,51 @@
 
     {% include 'search.html.twig' %}
 
-    <div class="card-columns ml-5 mr-5">
-        {% for song in songs %}
-            {% set art = song.getAlbumArtName() %}
-            {% set src = art ? song.getWebPath(art) : 'https://i.imgur.com/Mpj9ecV.jpg' %}
+    <h4 class="text-center mb-5">
+        Selected For You:
+    </h4>
+    {% if not songs %}
+        <h3 class="text-center font-weight-bold">No Data.</h3>
+    {% endif %}
 
-            <div class="card">
-                <div class="row">
-                    <div class="col-lg-5 col-md-5 col-xl-5 col-sm-12 d-flex">
-                        <img
-                            class="img-thumbnail"
-                            width="100%"
-                            height="100%"
-                            src="{{ src }}"
-                            alt="Card image cap"/>
-                    </div>
-                    <div class="col-lg-7 col-md-7 col-xl-7 col-sm-12">
-                        <div class="card-body">
-                            <h4 class="card-title">{{ song.getName() }}</h4>
-                            <p class="card-text">
-                            <h5 class="text-uppercase font-weight-bold mb-2">
-                                {{ song.getArtist().getName() }}
+    <div class="row mx-3">
+        <div class="card-columns">
+            {% for song in songs %}
+                {% set art = song.getAlbumArtName() %}
+                {% set src = art ? song.getWebPath(art) : 'https://i.imgur.com/Mpj9ecV.jpg' %}
+
+                <div class="card card-body">
+                    <div class="row mr-0 mx-sm-auto">
+                        <div class="col-lg-5 col-md-5 col-xl-5 col-sm-12 d-flex pr-0 pl-0">
+                            <img
+                                class="img-thumbnail"
+                                width="100%"
+                                height="100%"
+                                src="{{ src }}"
+                                alt="Card image cap"/>
+                        </div>
+                        <div class="col-lg-7 col-md-7 col-xl-7 col-sm-12 pt-2 pr-2 pb-2">
+                            <h5 class="card-title">
+                                <span class="fa fa-check-circle"> {{ song.getName() }}</span>
                             </h5>
-                            Uploaded on <b>{{ song.getUploadDate() }}</b>
+                            <p class="card-text">
+                                <span class="fa fa-user"> {{ song.getArtist().getName() }}</span>
                             </p>
+                            <p>
+                                <span>{{ song.getUploadDate() }}</span>
+                            </p>
+
+                            <a href="/song/{{ song.getId() }}/download/" target="_blank"
+                               class="btn btn-sm text-primary btn-primary text-light float-right mb-0">
+                                <span class="fa fa-download"></span> Download
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="card-footer">
-                    <a href="/song/{{ song.getId() }}/download/" target="_blank"
-                       class="text-primary">
-                        Download
-                    </a>
-                </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
+
+    {% include 'partials/song-about.html.twig' %}
 
 {% endblock %}

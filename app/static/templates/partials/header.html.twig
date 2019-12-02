@@ -1,35 +1,51 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-    <a class="navbar-brand" href="{{ base_url }}">The favorite christian music hub</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="{{ base_url }}" style="color: #969696;">
+                <strong>b
+                    <span class="fa fa-chevron-up"></span>r
+                    <span class="fa fa-chevron-up"></span>k
+                    <span class="fa fa-chevron-up"></span>
+                </strong>
+            </a>
+        </div>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+        {#        <a class="navbar-brand" href="{{ base_url }}">The favorite christian music hub</a>#}
 
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item {% if current_route == '' or current_route == 'song' %}active{% endif %}">
-                <a class="nav-link" href="{{ base_url }}song">
-                    <i class="fa fa-home"></i> &nbsp; Home
-                    <span class="sr-only">(current)</span>
-                </a>
-            </li>
-            <li class="nav-item {% if current_route == 'about' %}active{% endif %}">
-                <a class="nav-link" href="/about">
-                    <i class="fa fa-paperclip"></i> &nbsp; About
-                </a>
-            </li>
-            <li class="nav-item {% if current_route == 'privacy' %}active{% endif %}">
-                <a class="nav-link" href="/privacy">
-                    <i class="fa fa-copyright"></i> &nbsp; Privacy Policy
-                </a>
-            </li>
-            <li class="nav-item {% if current_route == 'feedback' %}active{% endif %}">
-                <a class="nav-link" href="/feedback">
-                    <i class="fa fa-envelope"></i> &nbsp; Contact
-                </a>
-            </li>
-        </ul>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if current_route == '' or current_route == 'song' %}active{% endif %}">
+                    <a class="nav-link" href="{{ base_url }}song">
+                        <i class="fa fa-home"></i> &nbsp; Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item {% if current_route == 'about' %}active{% endif %}">
+                    <a class="nav-link" href="/about">
+                        <i class="fa fa-paperclip"></i> &nbsp; About
+                    </a>
+                </li>
+                <li class="nav-item {% if current_route == 'privacy' %}active{% endif %}">
+                    <a class="nav-link" href="/privacy">
+                        <i class="fa fa-copyright"></i> &nbsp; Privacy Policy
+                    </a>
+                </li>
+                <li class="nav-item {% if current_route == 'feedback' %}active{% endif %}">
+                    <a class="nav-link" href="/feedback">
+                        <i class="fa fa-envelope"></i> &nbsp; Contact
+                    </a>
+                </li>
+            </ul>
+
+            {% if current_route != '' and current_route != 'song' %}
+                {% include 'search-form.html.twig' %}
+            {% endif %}
+        </div>
     </div>
 </nav>

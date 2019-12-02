@@ -101,6 +101,10 @@ abstract class AbstractCtrl implements Controller
     }
 
     public function get(IRequest $request) {
+        if ($this->entityName === null) {
+            return $this->render();
+        }
+
         $pk = $request->getObjectPk();
         if ($pk === null) {
             $data = $this->db->findAll($this->entityName, $this->sortColumn, $this->isAscending);
