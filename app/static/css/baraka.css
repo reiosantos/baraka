@@ -76,11 +76,11 @@ p.anim-header span {
 }
 
 .card:not(.accordion .card) {
-    margin: 2em;
+    /*margin: 2em;*/
 }
 
 .img-thumbnail {
-    max-height: 150px;
+    max-height: 139px;
 }
 
 .shadow-3 {
@@ -105,4 +105,67 @@ p.anim-header span {
 .nav-pills .nav-link.active {
     background: #e3601c;
     color: white;
+}
+
+.navbar li.active a {
+    font-weight: bold;
+}
+
+.navbar li:hover {
+    color: black;
+}
+
+.card-body {
+    padding: 0;
+}
+
+.about {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 80px;
+    text-align: left;
+    background: #EDE4D6;
+    border-radius: 15px 0 15px 0;
+    padding: 2%;
+}
+
+.topContainer {
+    height: 300px;
+    background-image: url("/app/static/img/juke.jpeg");
+    background-size: 870px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@media (max-width: 540px) {
+    #topContainer {
+        height: 300px;
+        width: 100%;
+        background-image: url("/app/static/img/juke.jpeg");
+        margin-top: 50px;
+        background-size: 945px;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+
+h4, h2 {
+    margin-top: 30px;
+}
+
+.admin h4, .admin h2 {
+    margin-top: 0;
+}
+.mt-min-4 {
+    margin-top: -40px;
+}
+
+.top-text {
+    color: white;
+    text-shadow: 1px 1px 2px #000000;
+}
+
+.nav-search {
+    width: 50%;
 }

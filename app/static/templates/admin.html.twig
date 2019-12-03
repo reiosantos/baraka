@@ -14,7 +14,7 @@
         </li>
     </ul>
 
-    <div class="tab-content mt-5">
+    <div class="tab-content mt-5 admin">
         <div id="artists" class="tab-pane fade in active">
             {% include "admin/artists.html.twig" %}
         </div>
@@ -22,7 +22,7 @@
             {% include "admin/songs.html.twig" %}
         </div>
         <div id="feedback" class="tab-pane fade">
-            <h3>Messages to you.</h3>
+            {% include "admin/feedback.html.twig" %}
         </div>
     </div>
 

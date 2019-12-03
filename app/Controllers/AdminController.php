@@ -61,7 +61,7 @@ class AdminController extends AbstractCtrl
 
         $this->db->persist($artist);
         $this->db->flush($artist);
-        return $this->render();
+        return $this->render(null, ['success' => 'Artist Added']);
     }
 
     /**
@@ -104,7 +104,7 @@ class AdminController extends AbstractCtrl
         $this->db->persist($song);
         $this->db->flush($song);
 
-        return $this->render();
+        return $this->render(null, ['success' => 'Added new song to the collection']);
     }
 
     private function validateSong(?array $song, ?string $artistId): bool

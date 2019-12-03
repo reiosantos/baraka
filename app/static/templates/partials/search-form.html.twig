@@ -1,0 +1,19 @@
+{% set cls = '' %}
+{% if current_route != '' and current_route != 'song' %}
+    {% set cls = 'nav-search' %}
+{% endif %}
+
+<form action="/song" method="get" class="{{ cls }}">
+    <div class="input-group border rounded-pill bg-dark p-0">
+        <input type="search" id="search" name="search"
+               aria-describedby="button-addon3"
+               placeholder="Type here to search song or artist?"
+               class="form-control bg-none border-0">
+        <div class="input-group-append border-0">
+            <button id="button-addon3" type="submit"
+                    class="btn btn-link text-warning">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+</form>

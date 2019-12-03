@@ -1,21 +1,9 @@
 <div class="container">
-    <div class="row mb-5">
-        <div class="col-lg-8 mx-auto">
+    <div class="row text-center">
+        <div class="col-lg-12 mx-auto">
+            <h4>Free Mp3 Download</h4>
             <div class="bg-white p-5 rounded shadow">
-                <form action="/song" method="get">
-                    <div class="input-group mb-4 border rounded-pill bg-dark p-0">
-                        <input type="search" id="search" name="search"
-                               aria-describedby="button-addon3"
-                               placeholder="What're you searching for?"
-                               class="form-control bg-none border-0">
-                        <div class="input-group-append border-0">
-                            <button id="button-addon3" type="submit"
-                                    class="btn btn-link text-warning">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                {% include 'search-form.html.twig' %}
                 <!-- End -->
             </div>
         </div>

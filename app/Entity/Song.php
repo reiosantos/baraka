@@ -54,7 +54,7 @@ class Song extends Uploader
 
     /**
      * @var Artist|null
-     * @ORM\ManyToOne(targetEntity="App\Entity\Artist", inversedBy="songs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Artist", inversedBy="songs", fetch="EAGER")
      * @ORM\JoinColumn(name="artist_id", referencedColumnName="ID")
      */
     private $artist;
@@ -90,7 +90,7 @@ class Song extends Uploader
      */
     public function getUploadDate(): ?string
     {
-        return $this->uploadDate->format('Y-m-d H:i:s');
+        return $this->uploadDate->format('D, jS Y');
     }
 
     /**

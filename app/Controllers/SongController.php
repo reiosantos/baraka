@@ -19,9 +19,7 @@ class SongController extends AbstractCtrl
     {
         $search = $request->get('search');
         if ($search) {
-            $data = $this->db->search($this->entityName, [
-                'like' => ['name' => '%' . $search . '%']
-            ]);
+            $data = $this->db->searchSong($this->entityName, $search);
             return $this->render($this->template, [$this->dataHolder => $data]);
         }
         return parent::get($request);

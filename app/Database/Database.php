@@ -96,7 +96,24 @@ class Database implements IDatabase
     {
         $this->getEntityManager()->remove($object);
     }
-
+    /** @noinspection MissingReturnTypeInspection */
+    /**
+     * @param string $entityName
+     * @param string $search
+     * @return mixed
+     */
+    public function searchSong(string $entityName, string $search)
+    {
+        return $this->entityManager->createQueryBuilder()
+            ->select(['s'])
+            ->from($entityName, 's')
+            ->join('s.artist', 'a')
+            ->where('LOWER(s.name) LIKE LOWER(:song) OR LOWER(a.name) LIKE LOWER(:artist)')
+            ->setParameters(['song' => "%$search%", 'artist' => "%$search%"])
+            ->orderBy('s.name', 'ASC')
+            ->getQuery()
+            ->getResult(ORM\Query::HYDRATE_OBJECT);
+    }
     /**
      * {@inheritDoc}
      */

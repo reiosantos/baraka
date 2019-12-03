@@ -5,6 +5,7 @@ namespace App\Controllers;
 
 use App\Entity\Feedback;
 use App\Utils\IRequest;
+use RuntimeException;
 
 class FeedbackController extends AbstractCtrl
 {
@@ -18,6 +19,15 @@ class FeedbackController extends AbstractCtrl
         $email = $request->get('email');
         $location = $request->get('location');
         $message = $request->get('message');
+        if (!$name) {
+            throw new RuntimeException('Name is required');
+        }
+        if (!$email) {
+            throw new RuntimeException('Valid email is required');
+        }
+        if (!$message) {
+            throw new RuntimeException('Empty message cannot be sent.');
+        }
 
         $feedback = new Feedback();
         $feedback->setUsername($name)
