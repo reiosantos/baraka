@@ -32,4 +32,6 @@ global $entityManager;
 
 $entityManager = EntityManager::create($details['db'], $config);
 
-require __DIR__ . '/bootstrap.php';
+if (!defined('STDIN')) {
+    require __DIR__ . '/bootstrap.php';
+}
