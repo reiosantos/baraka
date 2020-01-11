@@ -44,6 +44,9 @@ COPY --chown=www:www . /var/www/html
 RUN composer install
 RUN composer dump-autoload -o
 
+RUN mkdir ./cache && chmod 777 -R ./cache && chmod 777 -R ./app/uploads
+
+RUN yes | ./vendor/bin/doctrine-migrations migrations:migrate
 # Change current user to www
 #USER www
 

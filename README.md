@@ -5,6 +5,9 @@ Your favourite christian music hub
 ## SET UP
 ### Installation
 
+Before you go ahead, make sure you have [docker](https://docs.docker.com/install/), [docker-compose](https://docs.docker.com/compose/install/) and [composer](https://getcomposer.org/download/) installed on
+ your
+ machine
 ```bash
 git clone https://github.com/reiosantos/baraka.git
 ```
@@ -38,8 +41,16 @@ DB_DATABASE
 
 ```bash
 composer install
+
+composer dump-autoload -o
 ```
 
+Migrate tables
+```bash
+docker exec -it baraka-app bash
+
+./vendor/bin/doctrine-migrations migrations:migrate
+```
 To run this directly on the apache server's root ```/var/www/html/```, You only ned to copy the
  contents of the baraka folder to the web root folder.
  
