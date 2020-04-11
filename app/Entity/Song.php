@@ -55,7 +55,7 @@ class Song extends Uploader
     /**
      * @var Artist|null
      * @ORM\ManyToOne(targetEntity="App\Entity\Artist", inversedBy="songs", fetch="EAGER")
-     * @ORM\JoinColumn(name="artist_id", referencedColumnName="ID")
+     * @ORM\JoinColumn(name="artist_id", referencedColumnName="ID", onDelete="CASCADE")
      */
     private $artist;
 

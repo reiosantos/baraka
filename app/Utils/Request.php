@@ -21,6 +21,7 @@ use RuntimeException;
  */
 class Request implements IRequest
 {
+    private $entityManager;
     private $request;
     private $server;
     private $files;
@@ -34,6 +35,9 @@ class Request implements IRequest
 
     public function __construct()
     {
+        global $entityManager;
+        $this->entityManager = $entityManager;
+
         $this->request = $_REQUEST;
         $this->server = $_SERVER;
         $this->files = $_FILES;
@@ -110,35 +114,44 @@ class Request implements IRequest
     public function getAction(): ?string
     {
         $attr = $this->getRequestURIAttributes();
-        if (count($attr) < 2) {
+        if (count($attr) < 3) {
             return null;
         }
-        return $attr[1];
+        return $attr[2];
     }
 
     public function getRequestURIAttributes(): ?array
     {
         // This is used if the application is running in docker and/or the .htaccess is
         // working/ is able to resolve the path names
-        // in the form /controller/pk/
-        // or /admin/controller/pk/
+        // in the form /controller/pk/action
+        // or /admin/controller/pk/action
         $uri = explode('/', $this->requestUri);
         if ($this->getControllerName() === 'admin') {
-            return array_slice($uri, 3);
+            return array_slice($uri, 2);
         }
-        return array_slice($uri, 2);
+        return array_slice($uri, 1);
 
         // use below if server not running in docker or the .htaccess is not working for soe reason
         // return $this->request['name'] ?? null;
     }
 
+    public function getModelFromRequest(): ?string
+    {
+        $name = $this->getRequestURIAttributes();
+        if (count($name) > 1) {
+            return 'App\Entity\\' . ucwords($name[0]);
+        }
+        return null;
+    }
+
     public function getObjectPk(): ?string
     {
         $attr = $this->getRequestURIAttributes();
-        if (count($attr) === 0) {
+        if (count($attr) <= 1) {
             return null;
         }
-        return $attr[0];
+        return $attr[1];
     }
 
     public function get(string $param, ?string $default = null): ?string

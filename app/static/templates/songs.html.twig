@@ -1,12 +1,20 @@
 {% extends 'base.html.twig' %}
 
+{% set isSearching = request.get('search') is defined and request.get('search') is not null %}
+
 {% block body %}
 
     {% include 'search.html.twig' %}
 
     <h4 class="text-center mb-5">
-        Selected For You:
+        {% if isSearching %}
+            Search Results: ({{ songs|length }})
+        {% else %}
+            {% set songs = songs|slice(0, 6) %}
+            Selected For You:
+        {% endif %}
     </h4>
+
     {% if not songs %}
         <h3 class="text-center font-weight-bold">No Data.</h3>
     {% endif %}
@@ -18,7 +26,7 @@
 
             <div class="card card-body">
                 <div class="row mr-0 mx-sm-auto">
-                    <div class="col-lg-5 col-md-5 col-xl-5 col-sm-12 d-flex pr-0 pl-0">
+                    <div class="col-4 pr-0 pl-sm-0">
                         <img
                             class="img-thumbnail"
                             width="100%"
@@ -26,7 +34,7 @@
                             src="{{ src }}"
                             alt="Card image cap"/>
                     </div>
-                    <div class="col-lg-7 col-md-7 col-xl-7 col-sm-12 pt-2 pr-2 pb-2">
+                    <div class="col-8 pt-2 pr-2 pb-2">
                         <h5 class="card-title">
                             <span class="fa fa-check-circle"> {{ song.getName() }}</span>
                         </h5>

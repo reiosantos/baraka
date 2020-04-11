@@ -59,7 +59,21 @@ interface Controller
 
     /**
      * @param IRequest $request
-     * @return bool
+     * @return mixed
+     * @throws ORM\ORMException
+     * @throws ORM\EntityNotFoundException
+     * @throws ORM\OptimisticLockException
+     * @throws ORM\TransactionRequiredException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws Exception
+     */
+    public function update(IRequest $request);
+
+    /**
+     * @param IRequest $request
+     * @return string
      * @throws ORM\ORMException
      * @throws ORM\OptimisticLockException
      * @throws ORM\TransactionRequiredException
@@ -67,5 +81,5 @@ interface Controller
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function delete(IRequest $request): bool;
+    public function delete(IRequest $request): ?string;
 }
