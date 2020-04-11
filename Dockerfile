@@ -1,7 +1,7 @@
 FROM php:7.3-apache
 
 # Install dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt-get update -o Acquire::CompressionTypes::Order::=gz && apt-get install -y \
     build-essential \
     default-mysql-client \
     libpng-dev \
@@ -28,9 +28,6 @@ RUN a2enmod rewrite
 # Install composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Set working directory
-WORKDIR /var/www/html
-
 # Add user for laravel application
 RUN groupadd -g 1000 www
 RUN useradd -u 1000 -ms /bin/bash -g www www
@@ -41,13 +38,19 @@ COPY . /var/www/html
 # Copy existing application directory permissions
 COPY --chown=www:www . /var/www/html
 
-RUN composer install
-RUN composer dump-autoload -o
-
 RUN mkdir ./cache && chmod 777 -R ./cache && chmod 777 -R ./app/uploads
 
-RUN yes | ./vendor/bin/doctrine-migrations migrations:migrate
+# Set working directory
+WORKDIR /var/www/html
+
+RUN rm -rf vendor/* && composer install
+RUN composer dump-autoload -o
+
 # Change current user to www
 #USER www
 
 EXPOSE 80
+
+ENTRYPOINT ./entrypoint.sh
+
+CMD ["apache2-foreground"]

@@ -37,7 +37,7 @@ DB_PASSWORD
 DB_DATABASE
 ```
 
-> If run without usomg docker compose, you need to install composer dependencies with 
+> If run without usimg docker compose, you need to install composer dependencies with 
 
 ```bash
 composer install
