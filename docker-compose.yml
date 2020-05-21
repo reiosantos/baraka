@@ -14,7 +14,7 @@ services:
             APP_DEBUG: "true"
             DB_HOST: db
             DB_USERNAME: root
-            DB_PASSWORD: baraka-root
+            DB_PASSWORD: baraka
             DB_DATABASE: baraka
         ports:
           - 8000:80
@@ -33,12 +33,12 @@ services:
         restart: on-failure
         tty: true
         ports:
-            - "3306:3306"
+            - "3307:3306"
         volumes:
             - ./dbdata:/var/lib/mysql
         environment:
             MYSQL_DATABASE: baraka
-            MYSQL_ROOT_PASSWORD: baraka-root
+            MYSQL_ROOT_PASSWORD: baraka
         networks:
             - app-network
 
