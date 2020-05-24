@@ -1,6 +1,6 @@
 body, html {
-    font-family: Arial, Roboto, "Times New Roman", "Courier New", Courier, Verdana, Georgia, serif;
-    font-size: 12px;
+    font-family: "Arial", Helvetica, sans-serif;
+    font-size: 14px;
     height: 100%;
 }
 
@@ -20,6 +20,7 @@ nav {
 .form-control:focus {
     box-shadow: none;
 }
+
 
 .form-control::placeholder {
     font-size: 0.95rem;
@@ -80,7 +81,10 @@ p.anim-header span {
 }
 
 .img-thumbnail {
-    max-height: 139px;
+    height: 100%;
+    width: 100%;
+    padding: 0;
+    background: transparent;
 }
 
 .shadow-3 {
@@ -168,4 +172,11 @@ h4, h2 {
 
 .nav-search {
     width: 50%;
+}
+
+@media (max-width: 540px) {
+    .navbar-collapse  {
+        background: #ebebeb;
+        padding: 5px;
+    }
 }
