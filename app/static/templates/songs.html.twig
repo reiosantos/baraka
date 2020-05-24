@@ -10,7 +10,7 @@
         {% if isSearching %}
             Search Results: ({{ songs|length }})
         {% else %}
-            {% set songs = songs|slice(0, 6) %}
+            {% set songs = songs|slice(0, 3) %}
             Selected For You:
         {% endif %}
     </h4>
