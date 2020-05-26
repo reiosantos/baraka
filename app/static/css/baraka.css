@@ -9,6 +9,7 @@ body {
     flex-direction: column;
 }
 
+
 footer {
     margin-top: auto;
 }
@@ -16,6 +17,7 @@ footer {
 nav {
     height: 5em;
 }
+
 
 .form-control:focus {
     box-shadow: none;
@@ -55,7 +57,7 @@ p.anim-header span {
     /* Clip Background Image */
     background: url(http://f.cl.ly/items/010q3E1u3p2Q0j1L1S1o/animated_text_fill.png) repeat-y;
     -webkit-background-clip: text;
-    background-clip: text;
+
 
     /* Animate Background Image */
     -webkit-text-fill-color: transparent;
@@ -179,4 +181,11 @@ h4, h2 {
         background: #ebebeb;
         padding: 5px;
     }
+}
+
+
+.card-columns .card {
+    display: inline-block;
+    width: 100%;
+    float: left;
 }
