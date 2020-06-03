@@ -10,7 +10,7 @@
         {% if isSearching %}
             Search Results: ({{ songs|length }})
         {% else %}
-            {% set songs = songs|slice(0, 6) %}
+            {% set songs = songs|slice(0, 3) %}
             Selected For You:
         {% endif %}
     </h4>
@@ -32,7 +32,7 @@
                             width="100%"
                             height="100%"
                             src="{{ src }}"
-                            alt="Card image cap"/>
+                            alt="Artist photo"/>
                     </div>
                     <div class="col-8 pt-2 pr-2 pb-2">
                         <h5 class="card-title">
@@ -41,9 +41,9 @@
                         <p class="card-text">
                             <span class="fa fa-user"> {{ song.getArtist().getName() }}</span>
                         </p>
-                        <p>
-                            <span>{{ song.getUploadDate() }}</span>
-                        </p>
+{#                        <p>#}
+{#                            <span>{{ song.getUploadDate() }}</span>#}
+{#                        </p>#}
 
                         <a href="/song/{{ song.getId() }}/download/" target="_blank"
                            class="btn btn-sm text-primary btn-primary text-light float-right mb-0">
