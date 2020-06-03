@@ -80,7 +80,12 @@ abstract class AbstractCtrl implements Controller
      */
     final public function processRequest(IRequest $request)
     {
+        global $maxPostSize;
         try {
+            if ($request->getContentSize() > get_value_in_bytes($maxPostSize)) {
+                throw new RuntimeException('File size too big for the request: Max allowed size: ' . $maxPostSize);
+            }
+
             $method = $request->getRequestMethod();
             $action = $request->getAction();
             $tmp = $request->getModelFromRequest();

@@ -5,6 +5,7 @@ namespace App\Utils;
 
 interface IRequest
 {
+    public function getContentSize(): string;
     public function redirectToHome(?string $to = null): void;
     public function getRequestMethod(): ?string;
 

@@ -132,7 +132,7 @@ class Artist extends Uploader
     public function removeUpload(): void
     {
         $file = $this->photoName;
-        if ($file) {
+        if ($file && file_exists($file)) {
             unlink($file);
         }
     }

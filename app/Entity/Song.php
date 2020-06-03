@@ -189,10 +189,10 @@ class Song extends Uploader
     public function removeUpload(): void
     {
 
-        if ($this->albumArtName) {
+        if ($this->albumArtName && file_exists($this->albumArtName)) {
             unlink($this->albumArtName);
         }
-        if ($this->fileName) {
+        if ($this->fileName && file_exists($this->fileName)) {
             unlink($this->fileName);
         }
     }

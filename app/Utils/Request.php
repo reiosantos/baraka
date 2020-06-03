@@ -60,6 +60,10 @@ class Request implements IRequest
         $this->requestUri = explode('?', $this->server['REQUEST_URI'], 2)[0];
     }
 
+    public function getContentSize(): string {
+        return $this->server['CONTENT_LENGTH'] ?? '';
+    }
+
     public function redirectToHome(?string $to = null): void
     {
         if ($to && $to !== null) {

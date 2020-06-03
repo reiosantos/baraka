@@ -100,6 +100,7 @@ abstract class Uploader extends BaseModel
      */
     public function upload(): void
     {
+        global $maxUploadSize;
         if (null === $this->getFiles()) {
             return;
         }
@@ -108,7 +109,10 @@ abstract class Uploader extends BaseModel
         // be automatically thrown by move(). This will properly prevent
         // the entity from being persisted to the database on error
         foreach ($this->getFiles() as $name => $file) {
-            move_uploaded_file($file['tmp_name'], $file['path']);
+            $moved = move_uploaded_file($file['tmp_name'], $file['path']);
+            if (!$moved) {
+                throw new RuntimeException('File size too big, Max file size: ' . $maxUploadSize);
+            }
         }
 
         $this->files = null;

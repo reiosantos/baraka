@@ -24,3 +24,5 @@ $details['db'] = [
 ];
 
 $details['APP_DEBUG'] = getenv('APP_DEBUG');
+$details['POST_MAX_SIZE'] = '40M';
+$details['UPLOAD_MAX_FILESIZE'] = '40M';
