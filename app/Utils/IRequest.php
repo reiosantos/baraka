@@ -15,6 +15,7 @@ interface IRequest
     public function getControllerName(): ?string;
     public function getAction(): ?string;
     public function getRequestURIAttributes(): ?array;
+    public function getModelFromRequest(): ?string;
     public function getObjectPk(): ?string;
     public function get(string $param, string $default = null): ?string;
     public function getFile(string $param): ?array;

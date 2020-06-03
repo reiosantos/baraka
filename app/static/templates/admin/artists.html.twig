@@ -1,7 +1,12 @@
+{% if artist is defined %}
+    {% set action = "#{ base_url }artist/#{ artist.getId() }/update#artists" %}
+{% else %}
+    {% set action = "#{ base_url }artist#artists" %}
+{% endif %}
+
 <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-12 offset-lg-2 offset-md-2 offset-sm-0">
-        <form class="" action="{{ base_url }}artist#artists" method="post"
-              enctype="multipart/form-data">
+        <form class="" action="{{ action }}" method="post" enctype="multipart/form-data">
             <input type="hidden" name="model" value="artist"/>
 
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}"/>
@@ -12,13 +17,14 @@
                 </div>
                 <input type="text" class="form-control" placeholder="Name of artist"
                        name="name" aria-label="Name of artist"
+                       value="{{ artist is defined ? artist.getName() : '' }}"
                        aria-describedby="basic-addon1"/>
             </div>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
                     <span class="input-group-text">Details:</span>
                 </div>
-                <textarea name="details" class="form-control" aria-label="Details"></textarea>
+                <textarea name="details" class="form-control" aria-label="Details">{{ artist is defined ? artist.getDetails() : '' }}</textarea>
             </div>
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -50,6 +56,16 @@
                                     aria-controls="collapse{{ id }}">
                                 {{ artist.getName() }}
                             </button>
+
+                            <a href="{{ base_url }}artist/{{ id }}/delete/"
+                               class="btn btn-sm text-primary btn-danger text-dark pull-right">
+                                <i class="fa fa-trash-alt text-white"></i>
+                            </a>
+
+                            <a href="{{ base_url }}artist/{{ id }}/update#artists"
+                               class="btn btn-sm text-primary btn-success text-dark pull-right">
+                                <i class="fa fa-pencil-alt text-white"></i>
+                            </a>
                         </h2>
                     </div>
 

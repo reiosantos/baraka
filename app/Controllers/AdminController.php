@@ -36,6 +36,23 @@ class AdminController extends AbstractCtrl
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function update(IRequest $request)
+    {
+        $model = $request->getModelFromRequest();
+
+        switch ($model) {
+            case Artist::class:
+                return $this->updateArtist($request);
+            case Song::class:
+                return $this->updateSong($request);
+            default:
+                throw new RuntimeException("Could not process this request. Unknown model $model");
+        }
+    }
+
+    /**
      * @param IRequest $request
      * @return string|null
      * @throws ORM\ORMException
@@ -116,5 +133,73 @@ class AdminController extends AbstractCtrl
             throw new RuntimeException('An artist for this song is required, but you did not select any.');
         }
         return true;
+    }
+
+    /**
+     * @param IRequest $request
+     * @return string|null
+     * @throws ORM\ORMException
+     * @throws ORM\OptimisticLockException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    private function updateArtist(IRequest $request): ?string
+    {
+        $id = $request->getObjectPk();
+
+        $artist = $this->db->find(Artist::class, $id);
+        if ($artist === null) {
+            return $this->render(null, ['error' => 'Artist not found']);
+        }
+
+        if ($request->getRequestMethod() === 'get') {
+            return $this->render(null, ['artist' => $artist]);
+        }
+
+        $name = $request->get('name');
+        $details = $request->get('details');
+        $photo = $request->getFile('photo');
+
+        if (!$name || $name === null) {
+            throw new RuntimeException('Name of the artist is required.');
+        }
+
+        $artist->setName($name)->setDetails($details);
+
+        if ($photo && $photo['name']) {
+            $artist->setPhotoName($photo['name'])
+                ->setFiles($request->getFilesArray());
+        }
+
+        $this->db->persist($artist);
+        $this->db->flush($artist);
+        return $this->render(null, ['success' => 'Artist Updated', 'artist' => $artist]);
+    }
+
+    /**
+     * @param IRequest $request
+     * @return string|null
+     * @throws ORM\ORMException
+     * @throws ORM\OptimisticLockException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    private function updateSong(IRequest $request): ?string
+    {
+        $id = $request->getObjectPk();
+
+        $song = $this->db->find(Song::class, $id);
+        if ($song === null) {
+            return $this->render(null, ['error' => 'Song not found']);
+        }
+
+        if ($request->getRequestMethod() === 'get') {
+            return $this->render(null, ['song' => $song]);
+        }
+
+        // TODO: Implement update on songs
+        return $this->put($request);
     }
 }

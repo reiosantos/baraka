@@ -83,6 +83,11 @@ abstract class AbstractCtrl implements Controller
         try {
             $method = $request->getRequestMethod();
             $action = $request->getAction();
+            $tmp = $request->getModelFromRequest();
+
+            if ($tmp && $tmp !== null && trim($tmp) !== '') {
+                $this->entityName = $request->getModelFromRequest();
+            }
 
             if ($method === 'post') {
                 $request->validateToken();
@@ -120,7 +125,7 @@ abstract class AbstractCtrl implements Controller
         return $data;
     }
 
-    public function delete(IRequest $request): bool
+    public function delete(IRequest $request): ?string
     {
         $pk = $request->getObjectPk();
         $object = $this->db->find($this->entityName, $pk);
@@ -129,7 +134,6 @@ abstract class AbstractCtrl implements Controller
         }
         $this->db->delete($object);
         $this->db->flush($object);
-        $request->redirectToHome();
         return $this->render(null, ['success' => 'Deletion Successful']);
     }
 
@@ -139,6 +143,11 @@ abstract class AbstractCtrl implements Controller
     }
 
     public function put(IRequest $request)
+    {
+        throw new RuntimeException('Method Not Implemented.');
+    }
+
+    public function update(IRequest $request)
     {
         throw new RuntimeException('Method Not Implemented.');
     }

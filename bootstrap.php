@@ -19,7 +19,7 @@ $params = [
     'auto_reload' => true,
     'debug' => true,
     'autoescape' => 'html',
-    'strict_variables' => false
+    'strict_variables' => true
 ];
 
 global $database;
@@ -33,6 +33,7 @@ $twig->addGlobal('base_path', $APP_DIR);
 $twig->addGlobal('base_url', $request->getBaseUrl());
 $twig->addGlobal('js_path', $APP_DIR . '/static/js/');
 $twig->addGlobal('css_path', $APP_DIR . '/static/css/');
+$twig->addGlobal('request', $request);
 
 $twig->addGlobal('current_route', $request->getControllerName());
 
