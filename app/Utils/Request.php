@@ -161,7 +161,7 @@ class Request implements IRequest
     public function get(string $param, ?string $default = null): ?string
     {
         if (property_exists($this, $param)) {
-            return $this->{$param};
+            return trim($this->{$param});
         }
         $vars = [
             $this->request,
@@ -169,7 +169,7 @@ class Request implements IRequest
         ];
         foreach ($vars as $obj) {
             if (array_key_exists($param, $obj)) {
-                return $this->cleanData($obj[$param]);
+                return trim($this->cleanData($obj[$param]));
             }
         }
         return $default;
