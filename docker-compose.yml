@@ -4,7 +4,7 @@ services:
     #Baraka App
     app:
         build:
-            context: ""
+            context: .
             dockerfile: ./Dockerfile
         image: baraka
         container_name: baraka-app

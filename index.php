@@ -1,5 +1,6 @@
 <?php
 require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/app/Utils/Constants.php';
 require __DIR__ . '/app/Config/config.php';
 
 use Doctrine\ORM\EntityManager;

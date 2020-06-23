@@ -81,3 +81,12 @@ CREATE TABLE `doctrine_migration_versions` (
 /*!40000 ALTER TABLE `doctrine_migration_versions` DISABLE KEYS */;
 INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`) VALUES ('20200411140729','2020-04-11 14:08:21'),('20200411140935','2020-04-11 14:09:48'),('20200411141053','2020-04-11 14:12:57');
 /*!40000 ALTER TABLE `doctrine_migration_versions` ENABLE KEYS */;
+
+CREATE TABLE `users` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(120) COLLATE utf8_unicode_ci NOT NULL,
+  `create_date` datetime NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `UNIQ_1483A5E9F85E0677` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci

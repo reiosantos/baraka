@@ -1,10 +1,13 @@
-<?php /** @noinspection MissingReturnTypeInspection */
+<?php /** @noinspection MethodShouldBeFinalInspection */
+
+/** @noinspection MissingReturnTypeInspection */
 
 namespace App\Controllers;
 
 
 use App\Entity\Artist;
 use App\Entity\Song;
+use App\Entity\User;
 use App\Utils\IRequest;
 use Doctrine\ORM as ORM;
 use Exception;
@@ -33,6 +36,40 @@ class AdminController extends AbstractCtrl
             default:
                 throw new RuntimeException("Could not process this request. Unknown model $model");
         }
+    }
+
+    public function logout(IRequest $request): void
+    {
+        $request->terminateSession();
+        $request->redirectToHome();
+    }
+
+    /**
+     * @param IRequest $request
+     * @return void
+     */
+    public function login(IRequest $request): void
+    {
+        $username = $request->get('ba_username');
+        $password = $request->get('ba_password');
+
+        if ($username === null || $password === null) {
+            throw new RuntimeException("All fields are required.");
+        }
+
+        $username = filter_var($username, FILTER_SANITIZE_STRING);
+
+        $user = $this->db->getRepository(User::class)->findOneBy(['username' => $username]);
+
+        if ($user && $user->isPasswordValid($password)) {
+            $request->addToSession(BARAKA_KEY_USER, $user->getUsername());
+            $request->addToSession(BARAKA_KEY_USER_LOGGED_IN, true);
+            $request->addToSession(BARAKA_KEY_SESSION_CREATED, time());
+
+            $request->redirectToHome();
+            return;
+        }
+        throw new RuntimeException("Wrong Username or password.");
     }
 
     /**

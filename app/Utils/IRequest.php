@@ -10,6 +10,7 @@ interface IRequest
     public function getRequestMethod(): ?string;
 
     public function getBaseUrl(): string;
+    public function isAuthenticated(): bool;
     public function getQueryString(): ?string;
     public function getHost(): ?string;
     public function getRequestUri(): ?string;
@@ -25,6 +26,7 @@ interface IRequest
 
     public function addToSession(string $key, string $value = null): void;
     public function getFromSession(string $key): ?string;
+    public function terminateSession(): void;
 
     public function generateToken(): ?string;
 

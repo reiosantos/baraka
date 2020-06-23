@@ -32,7 +32,10 @@
 </head>
 <body>
 
-{% include 'header.html.twig' %}
+{% if is_admin_url and not is_authenticated %}
+{% else %}
+    {% include 'header.html.twig' %}
+{% endif %}
 
 <div class="container-fluid mb-5 mt-5">
     {#    {% include 'partials/jumbotron.html.twig' %}#}
