@@ -1,4 +1,6 @@
-<?php /** @noinspection GlobalVariableUsageInspection */
+<?php /** @noinspection MethodShouldBeFinalInspection */
+
+/** @noinspection GlobalVariableUsageInspection */
 
 namespace App\Utils;
 
@@ -86,6 +88,21 @@ class Request implements IRequest
         return '/';
     }
 
+    public function isAuthenticated(): bool
+    {
+        $created = $this->getFromSession(BARAKA_KEY_SESSION_CREATED);
+        $user = $this->getFromSession(BARAKA_KEY_USER);
+        $isLoggedIn = (bool)$this->getFromSession(BARAKA_KEY_USER_LOGGED_IN);
+
+        if ($user !== null && $isLoggedIn === true) {
+            if ((time() - $created) < BARAKA_SESSION_EXPIRATION) {
+                return true;
+            }
+            session_unset();
+        }
+        return false;
+    }
+
     public function getQueryString(): ?string{
         return $this->queryString;
     }
@@ -119,6 +136,9 @@ class Request implements IRequest
     {
         $attr = $this->getRequestURIAttributes();
         if (count($attr) < 3) {
+            if (isset($attr[0]) && ($attr[0] === 'login' || $attr[0] === 'logout')) {
+                return $attr[0];
+            }
             return null;
         }
         return $attr[2];
@@ -208,6 +228,12 @@ class Request implements IRequest
             return $_SESSION[$key];
         }
         return null;
+    }
+
+    public function terminateSession(): void
+    {
+        session_unset();
+        session_destroy();
     }
 
     /**

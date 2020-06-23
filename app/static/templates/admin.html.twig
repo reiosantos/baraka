@@ -2,28 +2,34 @@
 
 {% block body %}
 
-    <ul class="nav nav-pills nav-justified">
-        <li class="nav-item" onclick="updateUrl('artists')">
-            <a data-toggle="pill" class="nav-link" href="#artists">Artists</a>
-        </li>
-        <li class="nav-item" onclick="updateUrl('songs')">
-            <a data-toggle="pill" class="nav-link" href="#songs">Songs</a>
-        </li>
-        <li class="nav-item" onclick="updateUrl('feedback')">
-            <a data-toggle="pill" class="nav-link" href="#feedback">Feedback</a>
-        </li>
-    </ul>
+    {% if is_admin_url and is_authenticated %}
 
-    <div class="tab-content mt-5 admin">
-        <div id="artists" class="tab-pane fade in active">
-            {% include "admin/artists.html.twig" %}
+        <ul class="nav nav-pills nav-justified">
+            <li class="nav-item" onclick="updateUrl('artists')">
+                <a data-toggle="pill" class="nav-link" href="#artists">Artists</a>
+            </li>
+            <li class="nav-item" onclick="updateUrl('songs')">
+                <a data-toggle="pill" class="nav-link" href="#songs">Songs</a>
+            </li>
+            <li class="nav-item" onclick="updateUrl('feedback')">
+                <a data-toggle="pill" class="nav-link" href="#feedback">Feedback</a>
+            </li>
+        </ul>
+
+        <div class="tab-content mt-5 admin">
+            <div id="artists" class="tab-pane fade in active">
+                {% include "admin/artists.html.twig" %}
+            </div>
+            <div id="songs" class="tab-pane fade">
+                {% include "admin/songs.html.twig" %}
+            </div>
+            <div id="feedback" class="tab-pane fade">
+                {% include "admin/feedback.html.twig" %}
+            </div>
         </div>
-        <div id="songs" class="tab-pane fade">
-            {% include "admin/songs.html.twig" %}
-        </div>
-        <div id="feedback" class="tab-pane fade">
-            {% include "admin/feedback.html.twig" %}
-        </div>
-    </div>
+
+    {% else %}
+        {% include 'admin/login.html.twig' %}
+    {% endif %}
 
 {% endblock %}

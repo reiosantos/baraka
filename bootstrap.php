@@ -29,11 +29,15 @@ $database = new Database();
 $request = new Request();
 $twig = new Environment($loader, $params);
 
+$is_admin_url = strpos($request->getBaseUrl(), '/admin') === 0;
+
 $twig->addGlobal('base_path', $APP_DIR);
 $twig->addGlobal('base_url', $request->getBaseUrl());
 $twig->addGlobal('js_path', $APP_DIR . '/static/js/');
 $twig->addGlobal('css_path', $APP_DIR . '/static/css/');
 $twig->addGlobal('request', $request);
+$twig->addGlobal('is_admin_url', $is_admin_url);
+$twig->addGlobal('is_authenticated', $request->isAuthenticated());
 
 $twig->addGlobal('current_route', $request->getControllerName());
 

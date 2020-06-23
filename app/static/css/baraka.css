@@ -183,9 +183,12 @@ h4, h2 {
     }
 }
 
-
 .card-columns .card {
     display: inline-block;
     width: 100%;
 
+}
+
+.logout-btn {
+    color: #969696;
 }
