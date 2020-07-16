@@ -47,16 +47,16 @@ class SongController extends AbstractCtrl
 
         $fileName = $song->getFileName();
 
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/octet-stream');
-        header('Content-Disposition: attachment; filename=' . $song->getDownloadFileName($fileName));
-        header('Content-Transfer-Encoding: binary');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate');
         header('Pragma: public');
+        header('Expires: 0');
+        header('Content-Description: File Transfer');
+        header("Content-type: application/octet-stream");
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: public');
+        header('Content-Disposition: attachment; filename=' . $song->getDownloadFileName($fileName));
         header('Content-Length: ' . filesize($fileName));
-        ob_clean();
-        flush();
+        //ob_clean();
+        //flush();
         readfile($fileName);
 
         return $this->render();
